@@ -1,6 +1,6 @@
 - 👋 Hi, I’m giovani
-- 👀 I’m interested in projetc manager and time management. 
-- 🌱 I’m currently learning Msc. system of products. 
+- 👀 I’m interested in projetc manager. 
+- 🌱 I’m currently learning Msc. Management system. 
 - 💞️ I’m looking to collaborate on many projects.
 - 📫 How to reach me: gcm@unesc.net ; social media @1martins.gc our my personal cellphone.
 
