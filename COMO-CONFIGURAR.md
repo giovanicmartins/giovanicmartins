@@ -1,4 +1,4 @@
-# Como colocar o Lucro Claro no ar
+# Como colocar o Tudo Azul no ar
 
 São uns 20 minutos. A Vercel e o banco Neon são grátis. O Mercado Pago cobra uma taxa só sobre cada venda.
 

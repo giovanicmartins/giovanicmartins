@@ -1,4 +1,4 @@
-/* Lucro Claro — app financeiro (contas a pagar/receber, fluxo de caixa e cadastros) */
+/* Tudo Azul — app financeiro (contas a pagar/receber, fluxo de caixa e cadastros) */
 (function () {
   "use strict";
 
@@ -1019,7 +1019,7 @@
     }
     if (tipo === "esqueci") {
       box.innerHTML = `<h2>Esqueci minha senha</h2><p class="sub">Fale com o suporte e enviaremos uma nova senha.</p>
-        ${cfg.suporte ? `<a class="btn full" href="mailto:${esc(cfg.suporte)}?subject=Nova%20senha%20-%20Lucro%20Claro">✉️ ${esc(cfg.suporte)}</a>` : '<p class="muted">Responda o e-mail da sua compra pedindo uma nova senha.</p>'}
+        ${cfg.suporte ? `<a class="btn full" href="mailto:${esc(cfg.suporte)}?subject=Nova%20senha%20-%20Tudo%20Azul">✉️ ${esc(cfg.suporte)}</a>` : '<p class="muted">Responda o e-mail da sua compra pedindo uma nova senha.</p>'}
         <div class="auth-links"><button class="link" data-go="login">← Voltar</button></div>`;
     } else {
       const cad = tipo === "cadastro";
