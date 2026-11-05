@@ -730,7 +730,7 @@
   }
   function lerTexto(buf) {
     const u = new TextDecoder("utf-8").decode(buf);
-    return u.includes("�") ? new TextDecoder("windows-1252").decode(buf) : u;
+    return u.includes("\uFFFD") ? new TextDecoder("windows-1252").decode(buf) : u;
   }
   function lerOFX(txt) {
     const tag = (bloco, nome) => { const m = bloco.match(new RegExp("<" + nome + ">([^<\\r\\n]*)", "i")); return m ? m[1].trim() : ""; };
