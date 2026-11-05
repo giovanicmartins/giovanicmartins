@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grana no Controle — Planilha de Controle Financeiro</title>
+<meta name="description" content="Planilha simples para organizar seu dinheiro, controlar gastos e realizar suas metas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  /* ====== CONFIGURAÇÕES FÁCEIS DE MUDAR ====== */
+  :root{
+    --verde:#1e8e5a; --verde-escuro:#14663f; --claro:#e8f5ee;
+    --amarelo:#ffc83d; --texto:#1d2b24; --cinza:#5c6b64; --fundo:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Poppins,Arial,sans-serif;color:var(--texto);background:var(--fundo);line-height:1.6}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+  section{padding:64px 0}
+  h1{font-size:clamp(1.9rem,5vw,3rem);line-height:1.15;font-weight:800}
+  h2{font-size:clamp(1.5rem,4vw,2.2rem);line-height:1.2;text-align:center;margin-bottom:12px}
+  .sub{color:var(--cinza);text-align:center;max-width:640px;margin:0 auto 36px}
+  .btn{display:inline-block;background:var(--amarelo);color:#1d2b24;font-weight:800;text-decoration:none;
+       padding:18px 34px;border-radius:12px;font-size:1.1rem;box-shadow:0 6px 0 #d9a21c;transition:transform .1s}
+  .btn:hover{transform:translateY(2px);box-shadow:0 4px 0 #d9a21c}
+  .center{text-align:center}
+
+  /* Topo */
+  .hero{background:linear-gradient(135deg,var(--verde),var(--verde-escuro));color:#fff;padding:72px 0}
+  .hero .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+  .tag{display:inline-block;background:rgba(255,255,255,.15);padding:6px 14px;border-radius:99px;font-size:.85rem;margin-bottom:16px}
+  .hero p{font-size:1.1rem;margin:18px 0 28px;opacity:.95}
+  .hero small{display:block;margin-top:14px;opacity:.85}
+  .mock{background:#fff;border-radius:14px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,.25);color:var(--texto)}
+  .mock .bar{display:flex;gap:6px;margin-bottom:12px}.mock .bar i{width:10px;height:10px;border-radius:50%;background:#ddd}
+  .mock table{width:100%;border-collapse:collapse;font-size:.85rem}
+  .mock th{background:var(--verde);color:#fff;padding:6px;text-align:left}
+  .mock td{padding:6px;border-bottom:1px solid #eee}
+  .pos{color:var(--verde);font-weight:600}.neg{color:#c0392b;font-weight:600}
+  .chart{display:flex;align-items:flex-end;gap:8px;height:90px;margin-top:14px}
+  .chart span{flex:1;background:var(--verde);border-radius:4px 4px 0 0}
+  .chart span:nth-child(even){background:#f08a7e}
+
+  /* Cartões */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{background:var(--claro);border-radius:14px;padding:26px}
+  .card .ico{font-size:2rem}.card h3{margin:8px 0 6px;font-size:1.1rem}.card p{color:var(--cinza);font-size:.95rem}
+
+  .dor{background:#fafafa}
+  .lista{max-width:640px;margin:0 auto;list-style:none}
+  .lista li{padding:12px 0 12px 36px;position:relative;border-bottom:1px solid #eee}
+  .lista li::before{content:"✗";position:absolute;left:4px;color:#c0392b;font-weight:800}
+  .lista.ok li::before{content:"✓";color:var(--verde)}
+
+  .passos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:p}
+  .passo{text-align:center;padding:20px}
+  .passo::before{counter-increment:p;content:counter(p);display:grid;place-items:center;width:52px;height:52px;margin:0 auto 12px;
+    border-radius:50%;background:var(--verde);color:#fff;font-weight:800;font-size:1.3rem}
+
+  /* Preço */
+  .preco{background:linear-gradient(135deg,var(--verde),var(--verde-escuro));color:#fff}
+  .preco h2,.preco .sub{color:#fff}
+  .box{background:#fff;color:var(--texto);max-width:440px;margin:0 auto;border-radius:18px;padding:34px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+  .de{text-decoration:line-through;color:var(--cinza)}
+  .valor{font-size:3.2rem;font-weight:800;color:var(--verde);line-height:1.1;margin:6px 0}
+  .box ul{list-style:none;text-align:left;margin:20px 0 26px}
+  .box li{padding:6px 0 6px 28px;position:relative}.box li::before{content:"✓";position:absolute;left:0;color:var(--verde);font-weight:800}
+  .seguro{font-size:.85rem;color:var(--cinza);margin-top:14px}
+
+  .garantia{display:flex;gap:28px;align-items:center;max-width:760px;margin:0 auto;background:var(--claro);border-radius:18px;padding:30px}
+  .selo{flex:none;width:120px;height:120px;border-radius:50%;background:var(--amarelo);display:grid;place-items:center;
+        text-align:center;font-weight:800;line-height:1.1;border:6px dashed #fff;outline:4px solid var(--amarelo)}
+
+  details{max-width:720px;margin:0 auto 12px;background:#fafafa;border-radius:12px;padding:18px 22px}
+  summary{font-weight:600;cursor:pointer}details p{margin-top:10px;color:var(--cinza)}
+
+  footer{background:#10231a;color:#b9c9c0;text-align:center;padding:30px 16px;font-size:.85rem}
+
+  @media (max-width:800px){
+    .hero .grid,.cards,.passos{grid-template-columns:1fr}
+    .hero{text-align:center}
+    .garantia{flex-direction:column;text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<!-- 1. TOPO -->
+<header class="hero">
+  <div class="wrap grid">
+    <div>
+      <span class="tag">📊 Planilha pronta para usar</span>
+      <h1>Descubra para onde vai seu dinheiro e comece a sobrar no fim do mês</h1>
+      <p>Uma planilha simples, bonita e automática. Você só anota os gastos — ela faz as contas, mostra gráficos e avisa quando você passou do limite.</p>
+      <a class="btn" href="#preco">QUERO MINHA PLANILHA</a>
+      <small>✓ Funciona no Excel e no Google Planilhas · ✓ Acesso imediato</small>
+    </div>
+    <div class="mock" aria-hidden="true">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <table>
+        <tr><th>Mês</th><th>Entrou</th><th>Saiu</th><th>Sobrou</th></tr>
+        <tr><td>Janeiro</td><td>R$ 3.500</td><td>R$ 3.720</td><td class="neg">-R$ 220</td></tr>
+        <tr><td>Fevereiro</td><td>R$ 3.500</td><td>R$ 3.100</td><td class="pos">R$ 400</td></tr>
+        <tr><td>Março</td><td>R$ 3.800</td><td>R$ 2.950</td><td class="pos">R$ 850</td></tr>
+      </table>
+      <div class="chart"><span style="height:80%"></span><span style="height:85%"></span><span style="height:80%"></span><span style="height:70%"></span><span style="height:90%"></span><span style="height:65%"></span></div>
+    </div>
+  </div>
+</header>
+
+<!-- 2. DOR -->
+<section class="dor">
+  <div class="wrap">
+    <h2>Você se identifica com isso?</h2>
+    <p class="sub">Se marcou pelo menos um, essa planilha é para você.</p>
+    <ul class="lista">
+      <li>O salário cai e some antes do fim do mês</li>
+      <li>Você não sabe exatamente quanto gasta com comida, lazer ou cartão</li>
+      <li>Já tentou se organizar, mas os aplicativos são complicados</li>
+      <li>Quer juntar dinheiro para um sonho, mas nunca sobra nada</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 3. O QUE TEM NA PLANILHA -->
+<section>
+  <div class="wrap">
+    <h2>O que você recebe</h2>
+    <p class="sub">Tudo organizado em abas fáceis de entender.</p>
+    <div class="cards">
+      <div class="card"><div class="ico">📝</div><h3>Lançamentos</h3><p>Anote entradas e saídas em segundos, escolhendo a categoria numa lista.</p></div>
+      <div class="card"><div class="ico">📅</div><h3>Resumo mensal</h3><p>Veja quanto entrou, saiu e sobrou em cada mês do ano, tudo automático.</p></div>
+      <div class="card"><div class="ico">📊</div><h3>Gráficos</h3><p>Receitas x despesas e gastos por categoria, para enxergar onde cortar.</p></div>
+      <div class="card"><div class="ico">🎯</div><h3>Orçamento por categoria</h3><p>Defina um limite para cada gasto e receba aviso quando passar dele.</p></div>
+      <div class="card"><div class="ico">🏆</div><h3>Metas</h3><p>Cadastre seus sonhos e descubra quanto guardar por mês para chegar lá.</p></div>
+      <div class="card"><div class="ico">📘</div><h3>Guia rápido</h3><p>Instruções simples dentro da própria planilha. Sem precisar saber Excel.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. COMO FUNCIONA -->
+<section class="dor">
+  <div class="wrap">
+    <h2>Como funciona</h2>
+    <p class="sub">Em 3 passos você já está no controle.</p>
+    <div class="passos">
+      <div class="passo"><h3>Compre</h3><p>Pagamento seguro por Pix ou cartão.</p></div>
+      <div class="passo"><h3>Receba</h3><p>A planilha chega no seu e-mail na hora.</p></div>
+      <div class="passo"><h3>Use</h3><p>Anote seus gastos e veja a mágica acontecer.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. BENEFÍCIOS -->
+<section>
+  <div class="wrap">
+    <h2>Com a planilha você vai</h2>
+    <ul class="lista ok" style="margin-top:28px">
+      <li>Saber exatamente para onde vai cada real</li>
+      <li>Parar de passar aperto no fim do mês</li>
+      <li>Começar a guardar dinheiro todo mês</li>
+      <li>Usar no computador ou no celular (Google Planilhas)</li>
+      <li>Pagar uma única vez e usar para sempre</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6. PREÇO -->
+<section class="preco" id="preco">
+  <div class="wrap">
+    <h2>Comece hoje a organizar sua vida financeira</h2>
+    <p class="sub">Menos que um lanche, para economizar o ano inteiro.</p>
+    <div class="box">
+      <div class="de">De R$ 47,00</div>
+      <div>por apenas</div>
+      <div class="valor">R$ 19,90</div>
+      <div>pagamento único</div>
+      <ul>
+        <li>Planilha completa (Excel + Google Planilhas)</li>
+        <li>Resumo mensal e gráficos automáticos</li>
+        <li>Orçamento por categoria e metas</li>
+        <li>Acesso vitalício e atualizações</li>
+      </ul>
+      <!-- TROQUE O LINK ABAIXO PELO LINK DO SEU CHECKOUT (Kiwify, Hotmart, Mercado Pago...) -->
+      <a class="btn" href="https://SEU-LINK-DE-PAGAMENTO-AQUI">COMPRAR AGORA</a>
+      <p class="seguro">🔒 Compra 100% segura · Pix ou cartão</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. GARANTIA -->
+<section>
+  <div class="wrap">
+    <div class="garantia">
+      <div class="selo">7 DIAS<br>DE<br>GARANTIA</div>
+      <div>
+        <h3 style="font-size:1.4rem;margin-bottom:8px">Risco zero para você</h3>
+        <p>Se em até 7 dias você achar que a planilha não é para você, devolvemos 100% do seu dinheiro. Sem perguntas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. PERGUNTAS -->
+<section class="dor">
+  <div class="wrap">
+    <h2>Perguntas frequentes</h2>
+    <p class="sub">Ficou alguma dúvida?</p>
+    <details><summary>Preciso saber mexer no Excel?</summary><p>Não. Você só preenche as células amarelas. O resto a planilha calcula sozinha.</p></details>
+    <details><summary>Funciona no celular?</summary><p>Sim! Basta abrir no Google Planilhas (gratuito) pelo app do celular.</p></details>
+    <details><summary>Como recebo a planilha?</summary><p>Logo após o pagamento, você recebe o link de download no seu e-mail.</p></details>
+    <details><summary>É pagamento mensal?</summary><p>Não. Você paga uma vez só e usa para sempre.</p></details>
+    <details><summary>E se eu não gostar?</summary><p>Você tem 7 dias de garantia. Devolvemos todo o valor.</p></details>
+    <div class="center" style="margin-top:32px"><a class="btn" href="#preco">QUERO ORGANIZAR MEU DINHEIRO</a></div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Grana no Controle · Todos os direitos reservados<br>
+  Contato: seuemail@exemplo.com
+</footer>
+
+</body>
+</html>
