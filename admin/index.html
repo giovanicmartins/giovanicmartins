@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Admin — Grana no Controle</title>
+<title>Admin — Lucro Claro</title>
 <style>
-  :root{--dark:#0f5132;--green:#1e8e5a;--light:#e8f5ee;--red:#c0392b;--line:#e3ebe6;--muted:#5c6b64;--bg:#f4f8f6}
+  :root{--dark:#0a2a5e;--green:#1f5fd6;--light:#e8effc;--red:#c0392b;--line:#e1e7f2;--muted:#5b6782;--bg:#f3f6fc}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:system-ui,Arial,sans-serif;background:var(--bg);color:#1d2b24;padding:24px 16px}
   .box{max-width:720px;margin:0 auto;background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
@@ -30,7 +30,7 @@
 <body>
 <div class="box">
   <h1>🔐 Administração</h1>
-  <p class="sub">Libere aqui o acesso de quem comprou.</p>
+  <p class="sub">Quem paga pelo Mercado Pago é liberado automaticamente. Aqui você também pode liberar à mão (ex.: venda por fora), remover ou gerar nova senha.</p>
   <div id="msg" class="msg hidden"></div>
 
   <form id="f-login">
@@ -44,7 +44,7 @@
       <button>+ Liberar acesso</button>
     </form>
     <div class="tbl"><table>
-      <thead><tr><th>E-mail</th><th>Criou conta?</th><th>Liberado em</th><th></th></tr></thead>
+      <thead><tr><th>E-mail</th><th>Como entrou</th><th>Criou conta?</th><th>Liberado em</th><th></th></tr></thead>
       <tbody id="lista"></tbody>
     </table></div>
   </div>
@@ -65,10 +65,10 @@
       const { compradores } = await api("listar");
       sessionStorage.setItem("gnc-admin", chave);
       $("#f-login").classList.add("hidden"); $("#painel").classList.remove("hidden");
-      $("#lista").innerHTML = compradores.map((c) => `<tr><td>${esc(c.email)}</td><td>${c.tem_conta ? "✅ Sim" : "⏳ Ainda não"}</td>
+      $("#lista").innerHTML = compradores.map((c) => `<tr><td>${esc(c.email)}</td><td>${c.origem === "mercadopago" ? "💳 Mercado Pago" : "✋ Manual"}</td><td>${c.tem_conta ? "✅ Sim" : "⏳ Ainda não"}</td>
         <td>${new Date(c.criado_em).toLocaleDateString("pt-BR")}</td>
         <td class="acts">${c.tem_conta ? `<button class="sec" data-reset="${esc(c.email)}">Nova senha</button>` : ""}<button class="del" data-del="${esc(c.email)}">Remover</button></td></tr>`).join("")
-        || '<tr><td colspan="4" style="color:#5c6b64">Nenhum comprador ainda.</td></tr>';
+        || '<tr><td colspan="5" style="color:#5c6b64">Nenhum comprador ainda.</td></tr>';
       document.querySelectorAll("[data-del]").forEach((b) => b.onclick = async () => {
         if (!confirm("Remover o acesso de " + b.dataset.del + "?")) return;
         await api("remover", b.dataset.del); aviso("Acesso removido."); listar();

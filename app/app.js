@@ -1,4 +1,4 @@
-/* Grana no Controle — app financeiro (contas a pagar/receber, fluxo de caixa e cadastros) */
+/* Lucro Claro — app financeiro (contas a pagar/receber, fluxo de caixa e cadastros) */
 (function () {
   "use strict";
 
@@ -8,7 +8,7 @@
   const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
   const FORMAS = ["Pix","Boleto","Transferência","Cartão de crédito","Cartão de débito","Dinheiro"];
   const TIPOS_CONTA = ["Conta corrente","Poupança","Caixa","Cartão","Investimento"];
-  const CORES = ["#1e8e5a","#f08a7e","#1f6fb2","#ffc83d","#8e6cc0","#5c6b64","#2bb3a3","#e67e22"];
+  const CORES = ["#1f5fd6","#f08a7e","#0a2a5e","#7fb2ff","#0e7fb0","#8e6cc0","#94a3b8","#e67e22"];
   const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   const fmt = (v) => brl.format(v || 0);
   const pad = (n) => String(n).padStart(2, "0");
@@ -123,7 +123,7 @@
   }
 
   // ================= ARMAZENAMENTO =================
-  let S = null, modo = "demo", versao = 0, cfg = { linkCompra: "#", suporte: "" };
+  let S = null, modo = "demo", versao = 0, cfg = { linkCompra: "/#preco", suporte: "" };
   let saveTimer = null, salvando = false, pendente = false;
   const ui = { view: "painel", ano: hoje.getFullYear(), mes: hoje.getMonth() + 1, visao: "tudo", filial: "",
     status: "todos", busca: "", cad: "plano", fluxoModo: "diario", fluxoTipo: "projetado", fluxoDim: "plano", fluxoConta: "", ocultarZeros: true, dreRegime: "competencia" };
@@ -296,7 +296,7 @@
     if ($("#ver-venc")) $("#ver-venc").onclick = () => { ui.view = vencP.length ? "pagar" : "receber"; ui.status = "vencido"; render(); };
     ligarAcoesTitulos();
     const serie = serieDiaria(a, m, "projetado", "");
-    grafico("ch-fluxo", { type: "line", data: { labels: serie.map((d) => d.dia), datasets: [{ label: "Saldo", data: serie.map((d) => d.saldo), borderColor: "#1f6fb2", backgroundColor: "rgba(31,111,178,.12)", fill: true, tension: 0.3, pointRadius: 0 }] },
+    grafico("ch-fluxo", { type: "line", data: { labels: serie.map((d) => d.dia), datasets: [{ label: "Saldo", data: serie.map((d) => d.saldo), borderColor: "#0a2a5e", backgroundColor: "rgba(31,95,214,.12)", fill: true, tension: 0.3, pointRadius: 0 }] },
       options: { plugins: { legend: { display: false }, tooltip: { callbacks: { title: (c) => `Dia ${c[0].label}`, label: (c) => " " + fmt(c.raw) } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: tickBRL } } } } });
     if (grupos.length) grafico("ch-grupos", { type: "doughnut", data: { labels: grupos.map((g) => g[0]), datasets: [{ data: grupos.map((g) => g[1]), backgroundColor: CORES, borderWidth: 2 }] },
       options: { cutout: "60%", plugins: { legend: { position: "bottom", labels: { boxWidth: 12, font: { family: "Poppins", size: 11 } } }, tooltip: { callbacks: { label: (c) => ` ${c.label}: ${fmt(c.raw)}` } } } } });
@@ -439,8 +439,8 @@
         <tbody><tr class="tot"><td>Saldo inicial</td><td></td><td></td><td></td><td class="num">${fmt(ini)}</td><td></td></tr>${linhas || '<tr><td colspan="6" class="muted">Sem movimentos neste mês.</td></tr>'}
         <tr class="tot"><td>Total</td><td class="num">${fmt(ent)}</td><td class="num">${fmt(sai)}</td><td class="num">${fmt(ent - sai)}</td><td class="num">${fmt(fim)}</td><td></td></tr></tbody></table></div></div>`;
     grafico("ch-dia", { type: "bar", data: { labels: serie.map((d) => d.dia), datasets: [
-      { type: "line", label: "Saldo", data: serie.map((d) => d.saldo), borderColor: "#1f6fb2", backgroundColor: "#1f6fb2", tension: 0.3, pointRadius: 0 },
-      { label: "Entradas", data: serie.map((d) => d.ent), backgroundColor: "#1e8e5a", borderRadius: 4 },
+      { type: "line", label: "Saldo", data: serie.map((d) => d.saldo), borderColor: "#0a2a5e", backgroundColor: "#0a2a5e", tension: 0.3, pointRadius: 0 },
+      { label: "Entradas", data: serie.map((d) => d.ent), backgroundColor: "#1f5fd6", borderRadius: 4 },
       { label: "Saídas", data: serie.map((d) => -d.sai), backgroundColor: "#f08a7e", borderRadius: 4 }] },
       options: { plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: (c) => ` ${c.dataset.label}: ${fmt(Math.abs(c.raw))}` } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: tickBRL } } } } });
     $("#f-csv").onclick = () => baixarCSV(`fluxo-diario-${ym(ui.ano, ui.mes)}.csv`, [["Data", "Entradas", "Saídas", "Resultado", "Saldo"], ["Saldo inicial", "", "", "", ini],
@@ -505,8 +505,8 @@
       <div class="card mt"><h3>📋 Fluxo de caixa ${a}</h3><div class="tbl-wrap"><table><thead><tr><th class="sticky">${ui.fluxoDim === "plano" ? "Plano de contas" : "Item"}</th>${MESES.map((m) => `<th class="num">${m.slice(0, 3)}</th>`).join("")}<th class="num">Total</th></tr></thead>
         <tbody>${corpo || '<tr><td colspan="14" class="muted">Sem movimentos neste ano.</td></tr>'}${rodape}</tbody></table></div></div>`;
     grafico("ch-ano", { type: "bar", data: { labels: MESES.map((m) => m.slice(0, 3)), datasets: [
-      { label: "Entradas", data: ent, backgroundColor: "#1e8e5a", borderRadius: 5 }, { label: "Saídas", data: sai, backgroundColor: "#f08a7e", borderRadius: 5 },
-      { type: "line", label: "Saldo final", data: saldosFim, borderColor: "#1f6fb2", backgroundColor: "#1f6fb2", tension: 0.3 }] },
+      { label: "Entradas", data: ent, backgroundColor: "#1f5fd6", borderRadius: 5 }, { label: "Saídas", data: sai, backgroundColor: "#f08a7e", borderRadius: 5 },
+      { type: "line", label: "Saldo final", data: saldosFim, borderColor: "#0a2a5e", backgroundColor: "#0a2a5e", tension: 0.3 }] },
       options: { plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: (c) => ` ${c.dataset.label}: ${fmt(c.raw)}` } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: tickBRL } } } } });
     $("#f-csv").onclick = () => baixarCSV(`fluxo-de-caixa-${a}.csv`, csv);
   }
@@ -713,8 +713,8 @@
     $("#dre-cats").onclick = () => { ui.view = "cadastros"; ui.cad = "dre"; render(); };
     $("#dre-csv").onclick = () => baixarCSV(`dre-${a}.csv`, csv);
     grafico("ch-dre", { type: "bar", data: { labels: MESES.map((m) => m.slice(0, 3)), datasets: [
-      { label: "Receitas", data: rec, backgroundColor: "#1e8e5a", borderRadius: 5 }, { label: "Despesas", data: desp, backgroundColor: "#f08a7e", borderRadius: 5 },
-      { type: "line", label: "Resultado", data: res, borderColor: "#1f6fb2", backgroundColor: "#1f6fb2", tension: 0.3 }] },
+      { label: "Receitas", data: rec, backgroundColor: "#1f5fd6", borderRadius: 5 }, { label: "Despesas", data: desp, backgroundColor: "#f08a7e", borderRadius: 5 },
+      { type: "line", label: "Resultado", data: res, borderColor: "#0a2a5e", backgroundColor: "#0a2a5e", tension: 0.3 }] },
       options: { plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: (c) => ` ${c.dataset.label}: ${fmt(c.raw)}` } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: tickBRL } } } } });
   }
 
@@ -1019,7 +1019,7 @@
     }
     if (tipo === "esqueci") {
       box.innerHTML = `<h2>Esqueci minha senha</h2><p class="sub">Fale com o suporte e enviaremos uma nova senha.</p>
-        ${cfg.suporte ? `<a class="btn full" href="mailto:${esc(cfg.suporte)}?subject=Nova%20senha%20-%20Grana%20no%20Controle">✉️ ${esc(cfg.suporte)}</a>` : '<p class="muted">Responda o e-mail da sua compra pedindo uma nova senha.</p>'}
+        ${cfg.suporte ? `<a class="btn full" href="mailto:${esc(cfg.suporte)}?subject=Nova%20senha%20-%20Lucro%20Claro">✉️ ${esc(cfg.suporte)}</a>` : '<p class="muted">Responda o e-mail da sua compra pedindo uma nova senha.</p>'}
         <div class="auth-links"><button class="link" data-go="login">← Voltar</button></div>`;
     } else {
       const cad = tipo === "cadastro";
@@ -1050,7 +1050,7 @@
   async function iniciarNuvem() {
     let r;
     try { r = await api("/api/eu"); } catch (e) { return telaAuth("login", { t: "Sem conexão com o servidor." }); }
-    if (r.status === 401) return telaAuth("login");
+    if (r.status === 401) return telaAuth(new URLSearchParams(location.search).has("cadastro") ? "cadastro" : "login");
     if (r.status === 403) return telaAuth("semacesso");
     if (!r.ok) return telaAuth("login", { t: esc(r.d.erro || "Erro no servidor.") });
     const dd = await api("/api/dados");

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Obrigado! — Lucro Claro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Poppins,Arial,sans-serif;min-height:100vh;display:grid;place-items:center;padding:24px 16px;color:#14213d;
+       background:radial-gradient(900px 400px at 80% -10%,#2a63c9 0%,transparent 60%),linear-gradient(160deg,#0a2a5e,#0d3a80)}
+  .box{background:#fff;border-radius:22px;padding:36px 28px;max-width:480px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+  .ic{font-size:3rem;margin-bottom:8px}
+  h1{font-size:1.5rem;margin-bottom:8px}
+  p{color:#5b6782;margin-bottom:14px}
+  ol{text-align:left;margin:18px 0 24px;padding-left:20px;color:#14213d}
+  li{margin-bottom:8px}
+  .btn{display:block;background:#1f5fd6;color:#fff;text-decoration:none;font-weight:600;border-radius:12px;padding:15px}
+  .btn:hover{background:#1a4fb4}
+  small{display:block;margin-top:14px;color:#5b6782}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="ic" id="ic">🎉</div>
+  <h1 id="tit">Pagamento aprovado!</h1>
+  <p id="txt">Seu acesso ao <b>Lucro Claro</b> já está sendo liberado.</p>
+  <ol>
+    <li>Clique no botão abaixo.</li>
+    <li>Crie sua conta com o <b>mesmo e-mail</b> que você digitou na compra.</li>
+    <li>Pronto: comece a organizar suas finanças!</li>
+  </ol>
+  <a class="btn" href="app/?cadastro=1">Criar minha conta →</a>
+  <small>Se aparecer "e-mail ainda não liberado", aguarde 1 ou 2 minutos e tente de novo.</small>
+</div>
+<script>
+  var st = new URLSearchParams(location.search).get("status") || new URLSearchParams(location.search).get("collection_status");
+  if (st === "pending" || st === "in_process") {
+    document.getElementById("ic").textContent = "⏳";
+    document.getElementById("tit").textContent = "Pagamento em processamento";
+    document.getElementById("txt").innerHTML = "Assim que o Mercado Pago confirmar (boleto pode levar até 3 dias úteis), seu acesso é liberado <b>automaticamente</b>.";
+  }
+</script>
+</body>
+</html>

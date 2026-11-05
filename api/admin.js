@@ -8,7 +8,7 @@ export default rota(["POST"], async (req, res) => {
   const { acao, email: e } = await lerJson(req);
   const email = normEmail(e);
   if (acao === "listar") {
-    const r = await q(`select c.email, c.criado_em, (u.id is not null) as tem_conta
+    const r = await q(`select c.email, c.criado_em, c.origem, (u.id is not null) as tem_conta
                        from compradores c left join usuarios u on u.email = c.email order by c.criado_em desc`);
     return enviar(res, 200, { compradores: r });
   }
