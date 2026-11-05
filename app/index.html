@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f5132">
+<title>Grana no Controle — App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark:#0f5132; --green:#1e8e5a; --light:#e8f5ee; --red:#c0392b; --lred:#fdecea;
+  --blue:#1f6fb2; --lblue:#e7f0fa; --gold:#b7791f; --lgold:#fff7e0; --yel:#ffc83d;
+  --text:#1d2b24; --muted:#5c6b64; --line:#e3ebe6; --bg:#f4f8f6; --card:#fff;
+  --radius:14px; --shadow:0 2px 10px rgba(15,81,50,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:Poppins,Arial,sans-serif;color:var(--text);background:var(--bg);font-size:15px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* ===== Login ===== */
+.auth{min-height:100%;display:grid;place-items:center;padding:24px 16px;background:linear-gradient(135deg,var(--green),var(--dark))}
+.auth-box{background:#fff;border-radius:18px;padding:30px 24px;width:100%;max-width:400px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.logo{font-weight:800;font-size:1.35rem;color:var(--dark);display:flex;align-items:center;gap:8px}
+.auth-box h2{font-size:1.15rem;margin:18px 0 4px}
+.auth-box p.sub{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.field label{font-size:.82rem;font-weight:600;color:var(--muted)}
+.field input,.field select{border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;width:100%}
+.field input:focus,.field select:focus{outline:none;border-color:var(--green)}
+.btn{border:0;border-radius:10px;padding:12px 18px;font-weight:600;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
+.btn:hover{background:var(--dark)}
+.btn.full{width:100%}
+.btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+.btn.ghost:hover{background:var(--light)}
+.btn.yellow{background:var(--yel);color:var(--text)}
+.btn.danger{background:var(--red)}
+.btn.sm{padding:7px 12px;font-size:.85rem}
+.link{background:none;border:0;color:var(--green);font-weight:600;text-decoration:underline;padding:0}
+.auth-links{display:flex;justify-content:space-between;margin-top:14px;font-size:.85rem;gap:8px;flex-wrap:wrap}
+.msg{font-size:.88rem;border-radius:10px;padding:10px 12px;margin-bottom:12px}
+.msg.err{background:var(--lred);color:var(--red)}
+.msg.ok{background:var(--light);color:var(--dark)}
+.divider{text-align:center;color:var(--muted);font-size:.8rem;margin:16px 0 10px}
+
+/* ===== Layout do app ===== */
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100%}
+.side{background:var(--dark);color:#fff;padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+.side .logo{color:#fff;margin:0 8px 22px}
+.nav-btn{display:flex;align-items:center;gap:10px;background:none;border:0;color:#cfe5d9;padding:11px 12px;border-radius:10px;text-align:left;font-weight:500;width:100%}
+.nav-btn .ic{font-size:1.15rem;width:24px;text-align:center}
+.nav-btn:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-btn.active{background:var(--green);color:#fff}
+.side .foot{margin-top:auto;font-size:.8rem;color:#9fc3b0;padding:0 8px;word-break:break-all}
+.side .foot button{margin-top:8px;color:#fff;border-color:#fff}
+main{padding:22px 26px 100px;min-width:0}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.top h1{font-size:1.45rem}
+.mes-sel{display:flex;align-items:center;background:#fff;border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.mes-sel button{background:none;border:0;padding:9px 14px;font-size:1.1rem;color:var(--green)}
+.mes-sel button:hover{background:var(--light)}
+.mes-sel span{min-width:150px;text-align:center;font-weight:600}
+.save-st{font-size:.8rem;color:var(--muted)}
+.demo-bar{background:var(--yel);color:var(--text);padding:10px 16px;font-size:.88rem;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;text-align:center}
+.demo-bar a{color:var(--dark);font-weight:700}
+
+/* cartões */
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.card h3{font-size:1rem;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.kpi{border-top:4px solid var(--c);background:var(--bgc)}
+.kpi .lbl{font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--c)}
+.kpi .val{font-size:1.55rem;font-weight:800;color:var(--c);margin:4px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .cmp{font-size:.78rem;color:var(--muted)}
+.alerta{background:var(--lgold);border-left:5px solid var(--yel);border-radius:var(--radius);padding:14px 16px;font-weight:600}
+.alerta small{display:block;font-weight:400;margin-top:4px;color:var(--muted)}
+.mt{margin-top:16px}
+
+/* barras */
+.row-bar{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.row-bar:last-child{border-bottom:0}
+.row-bar .nm{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row-bar .vl{font-weight:600;text-align:right}
+.bar{grid-column:1/-1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);border-radius:99px}
+.bar.over i{background:var(--red)}
+.bar.warn i{background:var(--yel)}
+.row-bar .meta{grid-column:1/-1;font-size:.75rem;color:var(--muted)}
+.chart-box{position:relative;height:240px}
+.empty{color:var(--muted);text-align:center;padding:24px 8px;font-size:.9rem}
+
+/* tabelas / listas */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar input,.toolbar select{border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;min-width:0;flex:1}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th{background:var(--green);color:#fff;text-align:left;padding:10px;font-weight:600;white-space:nowrap}
+th:first-child{border-radius:10px 0 0 0}th:last-child{border-radius:0 10px 0 0}
+td{padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}
+tr:nth-child(even) td{background:#f9fcfa}
+td.num,th.num{text-align:right}
+.neg{color:var(--red);font-weight:600}.pos{color:var(--green);font-weight:600}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.78rem;font-weight:600;background:var(--light);color:var(--dark)}
+.chip.d{background:var(--lred);color:var(--red)}
+.ico-btn{background:none;border:0;padding:6px;border-radius:8px;font-size:1rem}
+.ico-btn:hover{background:var(--light)}
+.lanc-list{display:flex;flex-direction:column;gap:8px}
+.lanc{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:12px;background:#fff;border-radius:12px;padding:12px 14px;box-shadow:var(--shadow)}
+.lanc .dt{font-size:.78rem;color:var(--muted);text-align:center;line-height:1.1;min-width:38px}
+.lanc .dt b{display:block;font-size:1.15rem;color:var(--text)}
+.lanc .ds{min-width:0}
+.lanc .ds div{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lanc .ds small{color:var(--muted);font-size:.78rem}
+.lanc .vl{font-weight:700;white-space:nowrap}
+.heat td{text-align:right;font-size:.82rem}
+.heat td:first-child{text-align:left}
+.inp-cell{border:1.5px solid var(--line);border-radius:8px;padding:6px 8px;width:100%;min-width:90px;background:#fffdf3}
+
+/* metas */
+.meta-card .top-line{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.meta-card .nome{font-weight:600}
+.meta-card .bar{height:12px;margin:12px 0 8px}
+.meta-card .info{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);flex-wrap:wrap;gap:4px}
+.status{font-size:.8rem;font-weight:600}
+
+/* botão flutuante e modal */
+.fab{position:fixed;right:22px;bottom:24px;width:58px;height:58px;border-radius:50%;background:var(--yel);border:0;font-size:2rem;line-height:1;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:20;color:var(--text)}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:50;padding:16px}
+.modal{background:#fff;border-radius:18px;width:100%;max-width:440px;padding:22px;max-height:92vh;overflow:auto}
+.modal h3{margin-bottom:14px}
+.modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.seg button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px;font-weight:600}
+.seg button.on-r{border-color:var(--green);background:var(--light);color:var(--dark)}
+.seg button.on-d{border-color:var(--red);background:var(--lred);color:var(--red)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--dark);color:#fff;padding:10px 18px;border-radius:99px;font-size:.88rem;z-index:60}
+
+/* ===== Celular ===== */
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;flex-direction:row;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:30;justify-content:space-around;gap:0}
+  .side .logo,.side .foot{display:none}
+  .nav-btn{flex-direction:column;gap:2px;font-size:.68rem;padding:6px 4px;text-align:center;justify-content:center}
+  .nav-btn .ic{font-size:1.25rem}
+  main{padding:16px 16px 110px}
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .g2{grid-template-columns:1fr}
+  .fab{bottom:84px;right:16px}
+  .top h1{font-size:1.2rem}
+  .mes-sel{width:100%;justify-content:space-between}
+  .kpi .val{font-size:1.2rem}
+  .mobile-logout{display:inline-flex!important}
+  .toolbar input{flex:1 1 100%}
+  .toolbar select{flex:1 1 55%}
+  .toolbar .btn{flex:1 1 35%}
+  .hide-m{display:none!important}
+  .lanc{gap:10px;padding:12px}
+  .lanc .ds small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lanc .vl{font-size:.88rem}
+  .ico-btn{padding:4px}
+}
+@media (max-width:420px){ .kpi{padding:14px} .kpi .val{font-size:1.05rem} }
+.mobile-logout{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- Tela de login -->
+<section id="auth" class="auth hidden">
+  <div class="auth-box">
+    <div class="logo">💰 Grana no Controle</div>
+    <div id="auth-content"></div>
+  </div>
+</section>
+
+<!-- App -->
+<div id="demo-bar" class="demo-bar hidden">
+  <span>👀 <b>Modo demonstração</b> — os dados ficam só neste navegador.</span>
+  <a id="demo-buy" href="#">Comprar acesso completo →</a>
+</div>
+<div id="app" class="app hidden">
+  <aside class="side">
+    <div class="logo">💰 Grana no Controle</div>
+    <button class="nav-btn" data-view="painel"><span class="ic">📊</span>Painel</button>
+    <button class="nav-btn" data-view="lancamentos"><span class="ic">📝</span>Lançamentos</button>
+    <button class="nav-btn" data-view="categorias"><span class="ic">🏷️</span>Categorias</button>
+    <button class="nav-btn" data-view="resumo"><span class="ic">📅</span>Resumo</button>
+    <button class="nav-btn" data-view="metas"><span class="ic">🎯</span>Metas</button>
+    <div class="foot">
+      <div id="user-email"></div>
+      <button id="logout" class="btn ghost sm">Sair</button>
+    </div>
+  </aside>
+  <main>
+    <div class="top">
+      <h1 id="view-title">Painel</h1>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;justify-content:flex-end">
+        <span id="save-st" class="save-st"></span>
+        <div class="mes-sel" id="mes-sel">
+          <button id="prev" aria-label="Mês anterior">‹</button>
+          <span id="mes-label"></span>
+          <button id="next" aria-label="Próximo mês">›</button>
+        </div>
+        <button id="logout-m" class="btn ghost sm mobile-logout">Sair</button>
+      </div>
+    </div>
+    <div id="view"></div>
+  </main>
+  <button class="fab" id="fab" aria-label="Novo lançamento">+</button>
+</div>
+
+<div id="modal-root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
