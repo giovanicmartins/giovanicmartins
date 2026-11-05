@@ -1,0 +1,15 @@
+{
+  "name": "grana-no-controle",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node dev-server.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "1.1.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.15"
+  },
+  "engines": { "node": ">=20" }
+}

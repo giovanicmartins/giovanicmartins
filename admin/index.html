@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin — Grana no Controle</title>
+<style>
+  :root{--dark:#0f5132;--green:#1e8e5a;--light:#e8f5ee;--red:#c0392b;--line:#e3ebe6;--muted:#5c6b64;--bg:#f4f8f6}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,Arial,sans-serif;background:var(--bg);color:#1d2b24;padding:24px 16px}
+  .box{max-width:720px;margin:0 auto;background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+  h1{font-size:1.3rem;color:var(--dark);margin-bottom:4px}
+  p.sub{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+  form{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  input{flex:1;min-width:200px;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit}
+  button{border:0;border-radius:10px;padding:11px 16px;background:var(--green);color:#fff;font-weight:600;cursor:pointer;font:inherit}
+  button.sec{background:#fff;color:var(--green);border:1.5px solid var(--green);padding:6px 10px;font-size:.85rem}
+  button.del{background:#fff;color:var(--red);border:1.5px solid var(--red);padding:6px 10px;font-size:.85rem}
+  table{width:100%;border-collapse:collapse;font-size:.9rem}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-size:.8rem}
+  td.acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .msg{padding:10px 12px;border-radius:10px;margin-bottom:14px;font-size:.9rem;background:var(--light);color:var(--dark)}
+  .msg.err{background:#fdecea;color:var(--red)}
+  .hidden{display:none}
+  .tbl{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>🔐 Administração</h1>
+  <p class="sub">Libere aqui o acesso de quem comprou.</p>
+  <div id="msg" class="msg hidden"></div>
+
+  <form id="f-login">
+    <input id="chave" type="password" placeholder="Senha de administrador" required autocomplete="current-password">
+    <button>Entrar</button>
+  </form>
+
+  <div id="painel" class="hidden">
+    <form id="f-add">
+      <input id="email" type="email" placeholder="E-mail do comprador" required>
+      <button>+ Liberar acesso</button>
+    </form>
+    <div class="tbl"><table>
+      <thead><tr><th>E-mail</th><th>Criou conta?</th><th>Liberado em</th><th></th></tr></thead>
+      <tbody id="lista"></tbody>
+    </table></div>
+  </div>
+</div>
+<script>
+  let chave = sessionStorage.getItem("gnc-admin") || "";
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  function aviso(t, erro) { const m = $("#msg"); m.textContent = t; m.className = "msg" + (erro ? " err" : ""); }
+  async function api(acao, email) {
+    const r = await fetch("/api/admin", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": chave }, body: JSON.stringify({ acao, email }) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.erro || "Erro");
+    return d;
+  }
+  async function listar() {
+    try {
+      const { compradores } = await api("listar");
+      sessionStorage.setItem("gnc-admin", chave);
+      $("#f-login").classList.add("hidden"); $("#painel").classList.remove("hidden");
+      $("#lista").innerHTML = compradores.map((c) => `<tr><td>${esc(c.email)}</td><td>${c.tem_conta ? "✅ Sim" : "⏳ Ainda não"}</td>
+        <td>${new Date(c.criado_em).toLocaleDateString("pt-BR")}</td>
+        <td class="acts">${c.tem_conta ? `<button class="sec" data-reset="${esc(c.email)}">Nova senha</button>` : ""}<button class="del" data-del="${esc(c.email)}">Remover</button></td></tr>`).join("")
+        || '<tr><td colspan="4" style="color:#5c6b64">Nenhum comprador ainda.</td></tr>';
+      document.querySelectorAll("[data-del]").forEach((b) => b.onclick = async () => {
+        if (!confirm("Remover o acesso de " + b.dataset.del + "?")) return;
+        await api("remover", b.dataset.del); aviso("Acesso removido."); listar();
+      });
+      document.querySelectorAll("[data-reset]").forEach((b) => b.onclick = async () => {
+        if (!confirm("Criar uma nova senha para " + b.dataset.reset + "?")) return;
+        try { const d = await api("resetar", b.dataset.reset); aviso("Nova senha de " + b.dataset.reset + ": " + d.senha + "  (envie para o cliente)"); }
+        catch (e) { aviso(e.message, true); }
+      });
+    } catch (e) {
+      sessionStorage.removeItem("gnc-admin"); aviso(e.message, true);
+      $("#f-login").classList.remove("hidden"); $("#painel").classList.add("hidden");
+    }
+  }
+  $("#f-login").onsubmit = (e) => { e.preventDefault(); chave = $("#chave").value; listar(); };
+  $("#f-add").onsubmit = async (e) => {
+    e.preventDefault();
+    try { await api("adicionar", $("#email").value); aviso("✅ Acesso liberado! Peça para o cliente criar a conta com esse e-mail."); $("#email").value = ""; listar(); }
+    catch (err) { aviso(err.message, true); }
+  };
+  if (chave) listar();
+</script>
+</body>
+</html>
