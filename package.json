@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node dev-server.mjs"
+    "dev": "node dev-server.mjs",
+    "test": "node testes/api.test.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "1.1.0"

@@ -5,7 +5,7 @@ import path from "node:path";
 import { PGlite } from "@electric-sql/pglite";
 
 const raiz = path.dirname(new URL(import.meta.url).pathname);
-const banco = new PGlite(path.join(raiz, ".dados-local"));
+const banco = new PGlite(process.env.DADOS_LOCAL || path.join(raiz, ".dados-local"));
 globalThis.__bancoLocal = async (texto, params = []) => (await banco.query(texto, params)).rows;
 
 const TIPOS = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".png": "image/png", ".svg": "image/svg+xml", ".md": "text/plain; charset=utf-8" };
