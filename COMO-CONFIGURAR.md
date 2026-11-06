@@ -69,6 +69,16 @@ Segurança do login: depois de 5 senhas erradas, o e-mail fica bloqueado por 15 
 
 ---
 
+## Teste de pagamento (sem gastar dinheiro)
+
+1. No Mercado Pago, abra **Suas integrações → sua aplicação → Contas de teste** e crie um **comprador** de teste.
+2. Em **Credenciais de teste**, copie o Access Token e coloque em `MP_ACCESS_TOKEN` na Vercel. Faça **Redeploy**.
+3. Abra o site numa janela anônima, clique em **Comprar** e entre com o comprador de teste.
+4. Pague com o cartão de teste **5031 4332 1540 6351**, validade **11/30**, código **123**, nome **APRO**.
+5. Confira: você volta para a página de obrigado, e o e-mail aparece em `/admin` com 💳.
+6. Crie a conta no app com esse e-mail. Se entrar, está tudo funcionando.
+7. Depois troque `MP_ACCESS_TOKEN` pelo de **produção** e faça Redeploy.
+
 ## Como funciona a venda
 
 1. O cliente clica em **Comprar**, digita o e-mail e paga no Mercado Pago (Pix, cartão ou boleto).
