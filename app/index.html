@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0a2a5e">
 <title>Controller — App</title>
+<link rel="icon" type="image/svg+xml" href="../img/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
@@ -186,12 +188,13 @@ details.mais[open] summary{margin-bottom:10px}
 .mobile-only{display:none!important}
 </style>
 <link rel="stylesheet" href="../assets/app.css">
+<link rel="stylesheet" href="../assets/senha.css">
 </head>
 <body>
 
 <section id="auth" class="auth hidden">
   <div class="auth-box">
-    <div class="logo"><span class="brand-icon" aria-hidden="true">↗</span> Controller</div>
+    <div class="logo"><img class="brand-logo" src="../img/logo.svg" width="36" height="36" alt=""> Controller</div>
     <div id="auth-content"></div>
   </div>
 </section>
@@ -202,7 +205,7 @@ details.mais[open] summary{margin-bottom:10px}
 </div>
 <div id="app" class="app hidden">
   <aside class="side" aria-label="Navegação principal">
-    <div class="logo"><span class="brand-icon" aria-hidden="true">↗</span> Controller</div>
+    <div class="logo"><img class="brand-logo" src="../img/logo.svg" width="36" height="36" alt=""> Controller</div>
     <button class="nav-btn" data-view="painel"><span class="ic">📊</span>Painel</button>
     <button class="nav-btn" data-view="pagar"><span class="ic">📤</span>A pagar</button>
     <button class="nav-btn" data-view="receber"><span class="ic">📥</span>A receber</button>
@@ -216,6 +219,7 @@ details.mais[open] summary{margin-bottom:10px}
     </div>
   </aside>
   <main id="conteudo">
+    <div class="logo mobile-only app-mobile-brand"><img class="brand-logo" src="../img/logo.svg" width="36" height="36" alt="">Controller</div>
     <p class="workspace-label">VISÃO FINANCEIRA · CONTROLLER</p>
     <div class="top">
       <h1 id="view-title">Painel</h1>
@@ -243,6 +247,7 @@ details.mais[open] summary{margin-bottom:10px}
 <div id="modal-root"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="senha.js"></script>
 <script src="chaves.js"></script>
 <script src="app.js"></script>
 </body>

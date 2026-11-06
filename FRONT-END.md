@@ -29,7 +29,7 @@ As regras novas de CSS complementam os estilos originais. Os identificadores dos
 - Console sem erros durante a navegação final no aplicativo com o servidor local.
 - `git diff --check` sem erros.
 
-Nenhuma mudança em `api/`, `lib/`, `app/app.js`, pagamentos, servidor ou dependências. Login e pagamentos reais não foram testados neste trabalho visual.
+Nenhuma alteração de autoria do Codex em `api/`, `lib/`, pagamentos ou servidor. As versões mais recentes desses arquivos foram incorporadas da branch do Claude. O front-end do aplicativo está em `app/app.js`, `app/chaves.js` e `app/senha.js`.
 
 ## Como ver no computador
 
@@ -55,9 +55,31 @@ A interface está em `app/chaves.js`, com estilos em `assets/app.css`. O segredo
 
 Validação desta tela: dez testes de interface, criação/cópia/exclusão contra a API original em ambiente local descartável, sem alterações no back-end, e conferência visual no computador e celular.
 
-Os testes estão em `testes/chaves-ui.test.mjs` e usam jsdom apenas para teste. Para executá-los sem alterar as dependências do projeto:
+## Recuperação de senha
+
+- Na tela de entrada, clique em **Esqueci a senha**, informe o e-mail e use **Enviar link por e-mail**.
+- O link recebido abre `/app/?redefinir=TOKEN`. A tela **Criar nova senha** pede uma senha de pelo menos seis caracteres e a confirmação.
+- O ícone de olho permite mostrar ou ocultar cada senha. Os campos começam ocultos; o botão também está disponível na entrada, cadastro e admin.
+- Depois da troca, use **Entrar com a nova senha**. O token sai da URL após o sucesso.
+- Links vencidos, usados ou incompletos oferecem **Pedir novo link**. Falhas de conexão e mensagens de bloqueio aparecem na própria tela.
+
+As duas telas usam `POST /api/senha` com as ações `pedir` e `trocar`, conforme `BACK-END-PARA-O-FRONT.md`. Senhas e tokens não são gravados no armazenamento do navegador. A mensagem do pedido de recuperação permanece genérica, como fornecida pela API.
+
+## Logo
+
+A logo original do PR #3 está em `img/logo.svg`, sem alterações no desenho. Ela aparece ao lado de Controller com 36 px de altura no site, entrada do app, menu do app, cabeçalho móvel e admin. Também é usada como favicon.
+
+## Rodar os testes
+
+O `jsdom` agora está nas dependências de desenvolvimento, compatível com Node 20. Para instalar e rodar:
 
 ```sh
-npm install --prefix /tmp/controller-chaves-tests jsdom --no-audit --no-fund
-NODE_PATH=/tmp/controller-chaves-tests/node_modules node --test testes/chaves-ui.test.mjs
+npm ci
+npm run test:ui
+npm test
 ```
+
+- `npm run test:ui`: testes das chaves e das telas de senha.
+- `npm test`: testes originais do back-end do Claude, sem alterações.
+
+Verificação desta atualização: instalação limpa com `npm ci`, 25 testes de interface e 50 verificações do back-end aprovados, mais inspeção das telas e da logo no navegador. O envio de e-mail em produção depende da configuração de e-mail descrita pelo Claude; os testes usam ambiente local.

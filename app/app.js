@@ -1012,7 +1012,14 @@
   }
 
   // ================= LOGIN =================
+  let fecharSenha = () => {};
+  function limparLinkSenha() {
+    const url = new URL(location.href);
+    url.searchParams.delete("redefinir");
+    history.replaceState(history.state, "", url.pathname + url.search + url.hash);
+  }
   function telaAuth(tipo, aviso) {
+    fecharSenha(); fecharSenha = () => {};
     $("#auth").classList.remove("hidden");
     $("#app").classList.add("hidden");
     const box = $("#auth-content");
@@ -1026,24 +1033,28 @@
       $("#sair").onclick = async () => { await api("/api/sair", { method: "POST", body: "{}" }); telaAuth("login"); };
       return;
     }
-    if (tipo === "esqueci") {
-      box.innerHTML = `<h2>Esqueci minha senha</h2><p class="sub">Fale com o suporte e enviaremos uma nova senha.</p>
-        ${cfg.suporte ? `<a class="btn full" href="mailto:${esc(cfg.suporte)}?subject=Nova%20senha%20-%20Controller">✉️ ${esc(cfg.suporte)}</a>` : '<p class="muted">Responda o e-mail da sua compra pedindo uma nova senha.</p>'}
-        <div class="auth-links"><button class="link" data-go="login">← Voltar</button></div>`;
+    if (tipo === "esqueci" || tipo === "redefinir") {
+      fecharSenha = window.ControllerSenha.abrir(box, {
+        api, tipo, token: new URLSearchParams(location.search).get("redefinir"),
+        voltar: () => { limparLinkSenha(); telaAuth("login"); },
+        novoPedido: () => { limparLinkSenha(); telaAuth("esqueci"); }
+      });
+      return;
     } else {
       const cad = tipo === "cadastro";
       box.innerHTML = `<h2>${cad ? "Criar minha conta" : "Entrar"}</h2>
         <p class="sub">${cad ? "Use o <b>mesmo e-mail da compra</b>." : "Acesse seu controle financeiro."}</p>${msg}
         <form id="f">
-          <div class="field"><label>E-mail</label><input name="email" type="email" required autocomplete="email"></div>
-          <div class="field"><label>Senha ${cad ? "(mínimo 6 caracteres)" : ""}</label><input name="senha" type="password" minlength="6" required autocomplete="${cad ? "new-password" : "current-password"}"></div>
+          <div class="field"><label for="auth-email">E-mail</label><input id="auth-email" name="email" type="email" required autocomplete="email"></div>
+          <div class="field"><label for="auth-senha">Senha ${cad ? "(mínimo 6 caracteres)" : ""}</label><input id="auth-senha" name="senha" type="password" minlength="6" required autocomplete="${cad ? "new-password" : "current-password"}"></div>
           <button class="btn full" id="go">${cad ? "Criar conta" : "Entrar"}</button>
         </form>
         <div class="auth-links">${cad ? '<button class="link" data-go="login">Já tenho conta</button>' : '<button class="link" data-go="cadastro">Primeiro acesso? Criar conta</button><button class="link" data-go="esqueci">Esqueci a senha</button>'}</div>
         <div class="divider">ou</div><a class="btn ghost full" href="?demo=1">👀 Ver demonstração grátis</a>`;
+      window.ControllerSenha.ligarOlhos(box);
       $("#f").onsubmit = async (e) => {
         e.preventDefault();
-        const body = JSON.stringify({ email: e.target.email.value.trim(), senha: e.target.senha.value });
+        const body = JSON.stringify({ email: e.target.elements.email.value.trim(), senha: e.target.elements.senha.value });
         $("#go").disabled = true; $("#go").textContent = "Aguarde…";
         let r;
         try { r = await api(cad ? "/api/cadastro" : "/api/login", { method: "POST", body }); }
@@ -1072,6 +1083,7 @@
 
   // ================= INÍCIO =================
   (async () => {
+    if (new URLSearchParams(location.search).has("redefinir")) return telaAuth("redefinir");
     try { const c = await api("/api/config"); if (c.ok) cfg = c.d; } catch (e) { /* sem servidor */ }
     if (new URLSearchParams(location.search).has("demo")) {
       modo = "demo";

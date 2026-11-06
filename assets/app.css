@@ -120,3 +120,11 @@ button:disabled{opacity:.6;cursor:wait}
 .integration-dialog{margin:auto;width:calc(100% - 32px);max-width:460px;border:1px solid var(--line);border-radius:18px;padding:26px;color:var(--text);background:#fff;max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 24px 80px #061a4240}
 .integration-dialog::backdrop{background:#071d4270;backdrop-filter:blur(4px)}
 @media(max-width:600px){.integration-create{flex-direction:column}.integration-create .field{width:100%}.integration-create .btn{margin:0;width:100%}.integration-secret{padding:16px}.integration-actions .btn{flex:1;white-space:normal}.integration-row{gap:10px}.integration-info .muted{font-size:.74rem}.integration-row>.btn{flex-shrink:0}}
+
+.logo .brand-logo{display:block;width:36px;height:36px;flex-shrink:0}
+.password-help{margin:16px 0;line-height:1.8}
+.password-form .field{margin-bottom:16px}
+.password-form small{line-height:1.7}
+@media(max-width:900px){.password-form input{font-size:16px}}
+
+.app-mobile-brand{margin-bottom:20px;font-size:1.15rem;gap:10px}

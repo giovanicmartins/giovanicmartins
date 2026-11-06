@@ -52,12 +52,32 @@ Abra **Settings → Environment Variables** e adicione:
 | `ADMIN_PASSWORD` | A senha da sua página de administração |
 | `SUPORTE_EMAIL` | O seu e-mail de suporte |
 | `SITE_URL` | (opcional) O endereço do site. Exemplo: `https://lucroclaro.com.br` |
+| `RESEND_API_KEY` | Chave do Resend, para enviar o e-mail de "Esqueci minha senha" (veja abaixo) |
+| `EMAIL_REMETENTE` | Quem envia o e-mail. Exemplo: `Controller <nao-responda@seusite.com.br>` |
 
 Depois abra **Deployments → ⋯ → Redeploy**.
+
+### E-mail de "Esqueci minha senha" (Resend, grátis)
+
+1. Crie uma conta em **resend.com**.
+2. Em **Domains**, adicione o domínio do seu site e siga os passos.
+3. Em **API Keys**, crie uma chave e coloque em `RESEND_API_KEY` na Vercel.
+
+Segurança do login: depois de 5 senhas erradas, o e-mail fica bloqueado por 15 minutos e o cliente recebe um e-mail de aviso com o link para criar nova senha. Gerar nova senha no `/admin` desbloqueia na hora.
 
 ⚠️ Nunca coloque o Access Token nem a Assinatura secreta dentro do código ou no GitHub. Eles ficam **só** nas variáveis da Vercel.
 
 ---
+
+## Teste de pagamento (sem gastar dinheiro)
+
+1. No Mercado Pago, abra **Suas integrações → sua aplicação → Contas de teste** e crie um **comprador** de teste.
+2. Em **Credenciais de teste**, copie o Access Token e coloque em `MP_ACCESS_TOKEN` na Vercel. Faça **Redeploy**.
+3. Abra o site numa janela anônima, clique em **Comprar** e entre com o comprador de teste.
+4. Pague com o cartão de teste **5031 4332 1540 6351**, validade **11/30**, código **123**, nome **APRO**.
+5. Confira: você volta para a página de obrigado, e o e-mail aparece em `/admin` com 💳.
+6. Crie a conta no app com esse e-mail. Se entrar, está tudo funcionando.
+7. Depois troque `MP_ACCESS_TOKEN` pelo de **produção** e faça Redeploy.
 
 ## Como funciona a venda
 

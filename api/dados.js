@@ -9,7 +9,8 @@ export default rota(["GET", "PUT"], async (req, res) => {
     return enviar(res, 200, r.length ? r[0] : { conteudo: null, versao: 0 });
   }
   const { conteudo, versao } = await lerJson(req);
-  if (!conteudo || typeof conteudo !== "object") return enviar(res, 400, { erro: "Dados inválidos." });
+  if (!conteudo || typeof conteudo !== "object" || Array.isArray(conteudo)) return enviar(res, 400, { erro: "Dados inválidos." });
+  if (versao && !(Number.isInteger(versao) && versao > 0)) return enviar(res, 400, { erro: "Versão inválida." });
   const json = JSON.stringify(conteudo);
   if (json.length > 4 * 1024 * 1024) return enviar(res, 413, { erro: "Dados grandes demais." });
   let r;

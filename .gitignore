@@ -2,3 +2,4 @@ produto/
 node_modules/
 .dados-local/
 .env
+.dados-teste-*

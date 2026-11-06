@@ -1,8 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {createRequire} from 'node:module';
-const {JSDOM}=createRequire(import.meta.url)('jsdom');
+import {JSDOM} from 'jsdom';
 const source=await readFile(new URL('../app/chaves.js', import.meta.url),'utf8');
 const tick=()=>new Promise(r=>setTimeout(r,0));
 function fixture(api,demo=false){
