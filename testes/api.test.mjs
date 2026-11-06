@@ -6,7 +6,7 @@ import path from "node:path";
 const raiz = path.join(path.dirname(new URL(import.meta.url).pathname), "..");
 const pasta = fs.mkdtempSync(path.join(raiz, ".dados-teste-"));
 const srv = spawn(process.execPath, [path.join(raiz, "dev-server.mjs")], {
-  env: { ...process.env, PORT: "3999", MP_ACCESS_TOKEN: "x", MP_WEBHOOK_SECRET: "segredo-wh", MP_API_BASE: "http://localhost:4001", DADOS_LOCAL: pasta, DATABASE_URL: "", POSTGRES_URL: "" },
+  env: { ...process.env, PORT: "3999", MP_ACCESS_TOKEN: "x", MP_WEBHOOK_SECRET: "segredo-wh", MP_API_BASE: "http://localhost:4001", RESEND_API_KEY: "re_teste", RESEND_API_BASE: "http://localhost:4001/emails", DADOS_LOCAL: pasta, DATABASE_URL: "", POSTGRES_URL: "" },
   stdio: "inherit"
 });
 const fim = (c) => { srv.kill(); fs.rmSync(pasta, { recursive: true, force: true }); process.exit(c); };
@@ -15,9 +15,10 @@ import http from "node:http"; import crypto from "node:crypto";
 const B="http://localhost:3999"; let ok=0, falha=0;
 const t=(n,c,extra="")=>{c?ok++:falha++;console.log((c?"OK  ":"FALHA ")+n+" "+extra)};
 // fake MP
-const pagamentos={};
+const pagamentos={};const emails=[];
 http.createServer((req,res)=>{let b="";req.on("data",d=>b+=d);req.on("end",()=>{
  res.setHeader("Content-Type","application/json");
+ if(req.url.startsWith("/emails")){emails.push(JSON.parse(b));return res.end("{}")}
  if(req.url.startsWith("/checkout/preferences")){return res.end(JSON.stringify({init_point:"https://mp/x"}))}
  const m=req.url.match(/\/v1\/payments\/(\w+)/); if(m&&pagamentos[m[1]])return res.end(JSON.stringify(pagamentos[m[1]]));
  res.statusCode=404;res.end("{}")})}).listen(4001);
@@ -68,4 +69,20 @@ r=await fetch(B+"/api/login",{method:"POST",headers:{"content-type":"application
 pagamentos["111"].status="approved";await f("/api/mercadopago?data.id=111&type=payment",{m:"POST",body:{type:"payment",data:{id:"111"}},h:assin("111")});
 r=await f("/api/dados",{m:"PUT",body:{conteudo:{a:4},versao:"abc"}});t("versao invalida 400",r.s==400,r.s);
 r=await f("/api/dados",{m:"PUT",body:{conteudo:[1],versao:2}});t("lista recusada 400",r.s==400,r.s);
+// ---- Esqueci a senha e bloqueio ----
+pagamentos["111"].status="approved";await f("/api/mercadopago?data.id=111&type=payment",{m:"POST",body:{type:"payment",data:{id:"111"}},h:assin("111")});
+ck="";
+r=await f("/api/senha",{m:"POST",body:{acao:"pedir",email:"ninguem@teste.com"}});t("pedir senha e-mail sem conta responde igual",r.s==200&&emails.length==0);
+r=await f("/api/senha",{m:"POST",body:{acao:"pedir",email:E}});t("pedir senha envia e-mail",r.s==200&&emails.length==1,JSON.stringify(r.j));
+const tok=(emails[0]?.html.match(/redefinir=([\w-]+)/)||[])[1];t("e-mail tem link",!!tok);
+r=await f("/api/senha",{m:"POST",body:{acao:"trocar",token:"errado",senha:"nova123"}});t("token errado recusado",r.s==400);
+r=await f("/api/senha",{m:"POST",body:{acao:"trocar",token:tok,senha:"nova123"}});t("trocar senha",r.s==200,JSON.stringify(r.j));
+r=await f("/api/senha",{m:"POST",body:{acao:"trocar",token:tok,senha:"outra123"}});t("link so vale uma vez",r.s==400);
+r=await f("/api/login",{m:"POST",body:{email:E,senha:"nova123"}});t("login com senha nova",r.s==200,r.s);
+ck="";
+for(let i=0;i<5;i++) r=await f("/api/login",{m:"POST",body:{email:E,senha:"x"+i}});
+t("5 erros ainda 401",r.s==401,r.s);
+r=await f("/api/login",{m:"POST",body:{email:E,senha:"nova123"}});t("6a tentativa bloqueada 429",r.s==429,JSON.stringify(r.j));
+r=await f("/api/admin",{m:"POST",body:{acao:"resetar",email:E},h:{"x-admin-key":"admin-local"}});
+r=await f("/api/login",{m:"POST",body:{email:E,senha:r.j.senha}});t("admin resetar desbloqueia",r.s==200,r.s);
 console.log(`\n${ok} ok, ${falha} falhas`);fim(falha ? 1 : 0);

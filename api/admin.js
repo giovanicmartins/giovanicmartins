@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { q } from "../lib/db.js";
 import { enviar, lerJson, rota } from "../lib/http.js";
 import { exigirAdmin, normEmail, emailValido, hashSenha } from "../lib/auth.js";
+import { limparFalhas } from "../lib/bloqueio.js";
 
 export default rota(["POST"], async (req, res) => {
   exigirAdmin(req);
@@ -25,6 +26,7 @@ export default rota(["POST"], async (req, res) => {
     const nova = crypto.randomBytes(5).toString("hex");
     const r = await q("update usuarios set senha = $2 where email = $1 returning id", [email, hashSenha(nova)]);
     if (!r.length) return enviar(res, 404, { erro: "Esse e-mail ainda não criou conta." });
+    await limparFalhas(email);
     return enviar(res, 200, { senha: nova });
   }
   enviar(res, 400, { erro: "Ação desconhecida." });

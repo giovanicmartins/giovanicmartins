@@ -52,8 +52,18 @@ Abra **Settings → Environment Variables** e adicione:
 | `ADMIN_PASSWORD` | A senha da sua página de administração |
 | `SUPORTE_EMAIL` | O seu e-mail de suporte |
 | `SITE_URL` | (opcional) O endereço do site. Exemplo: `https://lucroclaro.com.br` |
+| `RESEND_API_KEY` | Chave do Resend, para enviar o e-mail de "Esqueci minha senha" (veja abaixo) |
+| `EMAIL_REMETENTE` | Quem envia o e-mail. Exemplo: `Controller <nao-responda@seusite.com.br>` |
 
 Depois abra **Deployments → ⋯ → Redeploy**.
+
+### E-mail de "Esqueci minha senha" (Resend, grátis)
+
+1. Crie uma conta em **resend.com**.
+2. Em **Domains**, adicione o domínio do seu site e siga os passos.
+3. Em **API Keys**, crie uma chave e coloque em `RESEND_API_KEY` na Vercel.
+
+Segurança do login: depois de 5 senhas erradas, o e-mail fica bloqueado por 15 minutos. Gerar nova senha no `/admin` desbloqueia na hora.
 
 ⚠️ Nunca coloque o Access Token nem a Assinatura secreta dentro do código ou no GitHub. Eles ficam **só** nas variáveis da Vercel.
 
