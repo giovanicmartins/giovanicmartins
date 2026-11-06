@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Controller — Finanças da sua empresa no azul</title>
+<meta name="description" content="Controle financeiro simples para pequenas empresas: contas a pagar e a receber, fluxo de caixa, DRE e importação de extrato. Use no celular e no computador.">
+<meta name="theme-color" content="#0a2a5e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0a2a5e; --blue:#1f5fd6; --blue2:#3b7bf0; --sky:#e8effc; --sky2:#f3f6fc;
+    --text:#14213d; --muted:#5b6782; --line:#e1e7f2; --red:#c0392b; --white:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Poppins,Arial,sans-serif;color:var(--text);background:var(--white);line-height:1.6}
+  img{max-width:100%;height:auto;display:block}
+  a{color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+  section{padding:80px 0}
+  h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.1;font-weight:800;letter-spacing:-.02em}
+  h2{font-size:clamp(1.6rem,3.6vw,2.4rem);line-height:1.15;font-weight:800;letter-spacing:-.01em;text-align:center;margin-bottom:12px}
+  .sub{color:var(--muted);text-align:center;max-width:660px;margin:0 auto 44px;font-size:1.05rem}
+  .tag{display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+  .tag.c{display:block;text-align:center}
+  .center{text-align:center}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:12px;padding:15px 26px;border:0;cursor:pointer;font:inherit;font-weight:600;transition:transform .1s,background .2s}
+  .btn:active{transform:translateY(1px)}
+  .btn-pri{background:var(--blue);color:#fff;box-shadow:0 8px 20px rgba(31,95,214,.35)}
+  .btn-pri:hover{background:#1a4fb4}
+  .btn-white{background:#fff;color:var(--navy)}
+  .btn-white:hover{background:var(--sky)}
+  .btn-line{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
+  .btn-line:hover{background:rgba(255,255,255,.1)}
+  .btn-big{padding:18px 34px;font-size:1.08rem}
+
+  header.nav{position:sticky;top:0;z-index:30;background:rgba(10,42,94,.97)}
+  header.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+  .logo{font-weight:800;font-size:1.25rem;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
+  .logo i{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--blue2),#7fb2ff);display:grid;place-items:center;font-style:normal;font-size:1rem}
+  .nav-links{display:flex;align-items:center;gap:22px}
+  .nav-links a{color:#cbd8f3;text-decoration:none;font-size:.92rem;font-weight:500}
+  .nav-links a:hover{color:#fff}
+  .nav-links .btn{padding:9px 16px;font-size:.9rem;color:var(--navy)}
+
+  .hero{background:radial-gradient(1200px 500px at 80% -10%,#2a63c9 0%,transparent 60%),linear-gradient(160deg,#0a2a5e,#0d3a80);color:#fff;padding:70px 0 0;overflow:hidden}
+  .hero .grid{text-align:center}
+  .hero p.lead{font-size:1.15rem;color:#d6e2fb;max-width:640px;margin:18px auto 30px}
+  .hero .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .hero .mini{margin-top:16px;font-size:.88rem;color:#a9bde6}
+  .shot{margin:46px auto 0;max-width:1000px;border-radius:16px 16px 0 0;overflow:hidden;box-shadow:0 -10px 60px rgba(0,0,0,.35);border:6px solid rgba(255,255,255,.12);border-bottom:0;background:#fff}
+  .shot .barra{height:30px;background:#eef2fa;display:flex;align-items:center;gap:6px;padding:0 12px}
+  .shot .barra i{width:10px;height:10px;border-radius:50%;background:#c9d3e6}
+
+  .faixa{background:var(--sky2);padding:34px 0;border-bottom:1px solid var(--line)}
+  .faixa .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center}
+  .faixa b{display:block;font-size:1.5rem;color:var(--navy);font-weight:800}
+  .faixa span{color:var(--muted);font-size:.9rem}
+
+  .dores{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:860px;margin:0 auto}
+  .dor{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;gap:12px;align-items:flex-start}
+  .dor .x{flex:none;width:28px;height:28px;border-radius:8px;background:#fdecea;color:var(--red);display:grid;place-items:center;font-weight:800}
+
+  .bg-soft{background:var(--sky2)}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;transition:transform .15s,box-shadow .15s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(10,42,94,.08)}
+  .card .ico{width:46px;height:46px;border-radius:12px;background:var(--sky);display:grid;place-items:center;font-size:1.4rem;margin-bottom:14px}
+  .card h3{font-size:1.05rem;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:.93rem}
+
+  .split{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center}
+  .split.rev{grid-template-columns:1.15fr 1fr}
+  .split.rev .txt{order:2}
+  .split h2{text-align:left}
+  .split p{color:var(--muted);margin-bottom:16px}
+  .check{list-style:none;margin:10px 0 0}
+  .check li{padding:7px 0 7px 32px;position:relative}
+  .check li::before{content:"✓";position:absolute;left:0;top:8px;width:22px;height:22px;border-radius:50%;background:var(--sky);color:var(--blue);font-weight:800;font-size:.8rem;display:grid;place-items:center}
+  .frame{border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(10,42,94,.18);border:1px solid var(--line)}
+  .phone{max-width:300px;margin:0 auto;border-radius:34px;overflow:hidden;border:10px solid var(--navy);box-shadow:0 20px 50px rgba(10,42,94,.25)}
+
+  .passos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:p}
+  .passo{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;text-align:center}
+  .passo::before{counter-increment:p;content:counter(p);display:grid;place-items:center;width:48px;height:48px;margin:0 auto 14px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;font-size:1.2rem}
+  .passo p{color:var(--muted);font-size:.93rem}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .chips span{background:#fff;border:1px solid var(--line);border-radius:99px;padding:10px 18px;font-weight:500}
+
+  .preco{background:linear-gradient(160deg,#0a2a5e,#0d3a80);color:#fff}
+  .preco h2{color:#fff}.preco .sub{color:#c7d6f5}
+  .box{background:#fff;color:var(--text);max-width:460px;margin:0 auto;border-radius:22px;padding:36px 30px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+  .box .selo{display:inline-block;background:var(--sky);color:var(--blue);font-weight:700;font-size:.78rem;padding:5px 12px;border-radius:99px;margin-bottom:12px}
+  .valor{font-size:3.3rem;font-weight:800;color:var(--navy);line-height:1;margin:8px 0}
+  .valor small{font-size:1.1rem;font-weight:600;vertical-align:top;margin-right:4px}
+  .box ul{list-style:none;text-align:left;margin:22px 0 26px}
+  .box li{padding:7px 0 7px 30px;position:relative;font-size:.95rem}
+  .box li::before{content:"✓";position:absolute;left:0;color:var(--blue);font-weight:800}
+  .box .btn{width:100%}
+  .seguro{font-size:.84rem;color:var(--muted);margin-top:14px}
+
+  .garantia{display:flex;gap:26px;align-items:center;max-width:780px;margin:0 auto;background:var(--sky2);border:1px solid var(--line);border-radius:20px;padding:30px}
+  .garantia .selo7{flex:none;width:110px;height:110px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;text-align:center;font-weight:800;line-height:1.1;font-size:.95rem;box-shadow:0 0 0 8px var(--sky)}
+
+  details{max-width:760px;margin:0 auto 12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 22px}
+  summary{font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--blue);font-weight:800;font-size:1.2rem}
+  details[open] summary::after{content:"−"}
+  details p{margin-top:10px;color:var(--muted)}
+
+  .final{background:var(--sky);text-align:center}
+  footer{background:#071d42;color:#a9bde6;padding:34px 0;font-size:.88rem}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer a{color:#cbd8f3}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(7,29,66,.6);display:none;place-items:center;z-index:50;padding:16px}
+  .modal-bg.on{display:grid}
+  .modal{background:#fff;border-radius:20px;width:100%;max-width:420px;padding:28px}
+  .modal h3{font-size:1.25rem;margin-bottom:6px}
+  .modal p{color:var(--muted);font-size:.92rem;margin-bottom:16px}
+  .modal label{font-size:.85rem;font-weight:600;color:var(--muted)}
+  .modal input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font:inherit;margin:6px 0 14px}
+  .modal input:focus{outline:none;border-color:var(--blue)}
+  .modal .btn{width:100%}
+  .modal .cancel{background:none;border:0;color:var(--muted);width:100%;margin-top:10px;cursor:pointer;font:inherit}
+  .modal .err{background:#fdecea;color:var(--red);border-radius:10px;padding:10px 12px;font-size:.88rem;margin-bottom:12px;display:none}
+
+  @media (max-width:900px){
+    section{padding:60px 0}
+    .cards,.passos{grid-template-columns:1fr 1fr}
+    .split,.split.rev{grid-template-columns:1fr;gap:30px}
+    .split.rev .txt{order:0}
+    .split h2{text-align:center}
+    .faixa .grid{grid-template-columns:1fr 1fr}
+    .nav-links a:not(.btn){display:none}
+  }
+  @media (max-width:600px){
+    .cards,.passos,.dores{grid-template-columns:1fr}
+    .garantia{flex-direction:column;text-align:center}
+    .hero .ctas .btn{width:100%}
+    .shot{border-width:4px}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#"><i>📈</i>Controller</a>
+    <nav class="nav-links">
+      <a href="#recursos">Recursos</a>
+      <a href="#como">Como funciona</a>
+      <a href="#preco">Preço</a>
+      <a href="#faq">Dúvidas</a>
+      <a href="app/">Entrar</a>
+      <a class="btn btn-white" href="app/?demo=1">Testar grátis</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap grid">
+    <div>
+      <span class="tag" style="color:#9cc0ff">Controle financeiro para pequenas empresas</span>
+      <h1>Saiba quanto sua empresa<br>lucra de verdade</h1>
+      <p class="lead">Contas a pagar e a receber, fluxo de caixa e DRE em um só lugar. Simples como uma planilha, completo como um sistema.</p>
+      <div class="ctas">
+        <button class="btn btn-pri btn-big" data-comprar>Quero o Controller</button>
+        <a class="btn btn-line btn-big" href="app/?demo=1">👀 Ver demonstração</a>
+      </div>
+      <p class="mini">✓ Sem instalar nada &nbsp; ✓ Celular e computador &nbsp; ✓ Acesso na hora</p>
+    </div>
+    <div class="shot">
+      <div class="barra"><i></i><i></i><i></i></div>
+      <img src="img/app-painel.jpg" alt="Painel do Controller com saldo em contas, contas a receber, contas a pagar e gráfico de saldo projetado" width="1920" height="1200">
+    </div>
+  </div>
+</section>
+
+<div class="faixa">
+  <div class="wrap grid">
+    <div><b>📤 📥</b><span>Contas a pagar e receber</span></div>
+    <div><b>💧</b><span>Fluxo de caixa projetado</span></div>
+    <div><b>📑</b><span>DRE automática</span></div>
+    <div><b>📄</b><span>Importa extrato OFX e Excel</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <span class="tag c">Isso acontece com você?</span>
+    <h2>Vender bem e não ver o dinheiro sobrar</h2>
+    <p class="sub">Muita empresa fatura e não sabe se está lucrando. Com o Controller, você enxerga tudo e mantém o caixa no azul.</p>
+    <div class="dores">
+      <div class="dor"><span class="x">✗</span><span>Você esquece contas e paga juros e multa</span></div>
+      <div class="dor"><span class="x">✗</span><span>Não sabe se vai ter dinheiro no caixa no fim do mês</span></div>
+      <div class="dor"><span class="x">✗</span><span>Mistura o dinheiro da empresa com o pessoal</span></div>
+      <div class="dor"><span class="x">✗</span><span>Fatura bem, mas não sabe quanto realmente lucrou</span></div>
+      <div class="dor"><span class="x">✗</span><span>Perde horas com planilhas que quebram</span></div>
+      <div class="dor"><span class="x">✗</span><span>Clientes atrasam e você só percebe tarde demais</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-soft" id="recursos">
+  <div class="wrap">
+    <span class="tag c">Recursos</span>
+    <h2>Tudo o que sua empresa precisa</h2>
+    <p class="sub">Sem complicação e sem termos difíceis. Você lança, o Controller organiza.</p>
+    <div class="cards">
+      <div class="card"><div class="ico">📤</div><h3>Contas a pagar</h3><p>Cadastre, parcele e repita contas. Veja o que vence e marque como pago com um toque.</p></div>
+      <div class="card"><div class="ico">📥</div><h3>Contas a receber</h3><p>Saiba quem te deve, o que está atrasado e quanto entra nos próximos dias.</p></div>
+      <div class="card"><div class="ico">💧</div><h3>Fluxo de caixa</h3><p>Diário e mensal, realizado e projetado, a partir do saldo inicial de cada conta.</p></div>
+      <div class="card"><div class="ico">📑</div><h3>DRE automática</h3><p>Receitas − Despesas = Resultado operacional, com as categorias que você define.</p></div>
+      <div class="card"><div class="ico">📒</div><h3>Plano de contas</h3><p>Numeração automática (1.1, 1.1.1...). Crie quantas contas e subcontas quiser.</p></div>
+      <div class="card"><div class="ico">📄</div><h3>Importar extrato</h3><p>Traga o extrato do banco em OFX ou Excel. Lançamentos repetidos são detectados.</p></div>
+      <div class="card"><div class="ico">🏬</div><h3>Filiais, centros e verticais</h3><p>Separe resultados por filial, centro de custo e linha de negócio.</p></div>
+      <div class="card"><div class="ico">🙋</div><h3>Empresa e pessoal</h3><p>Marque o que é pessoal e veja a empresa e a sua vida financeira separadas.</p></div>
+      <div class="card"><div class="ico">☁️</div><h3>Seguro na nuvem</h3><p>Login com senha, dados salvos automaticamente e exportação para Excel.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap split">
+    <div class="txt">
+      <span class="tag">DRE</span>
+      <h2>Veja seu lucro mês a mês</h2>
+      <p>A DRE sai pronta a partir dos seus lançamentos. Você decide em qual categoria entra cada despesa.</p>
+      <ul class="check">
+        <li>Receitas − Despesas = Resultado operacional</li>
+        <li>Margem de lucro de cada mês</li>
+        <li>Regime de competência ou de caixa</li>
+        <li>Exporta para Excel em um clique</li>
+      </ul>
+    </div>
+    <div class="frame"><img src="img/app-dre.jpg" alt="Tela da DRE com receitas, despesas e resultado operacional por mês" loading="lazy" width="1920" height="1200"></div>
+  </div>
+</section>
+<section class="bg-soft">
+  <div class="wrap split rev">
+    <div class="txt">
+      <span class="tag">Fluxo de caixa</span>
+      <h2>Saiba hoje se vai faltar dinheiro amanhã</h2>
+      <p>O fluxo projetado junta o que já entrou e saiu com o que vai vencer, e avisa se o saldo ficar negativo.</p>
+      <ul class="check">
+        <li>Saldo inicial por conta bancária</li>
+        <li>Visão diária e anual por plano de contas</li>
+        <li>Separado por filial, centro de custo e vertical</li>
+      </ul>
+    </div>
+    <div class="frame"><img src="img/app-fluxo.jpg" alt="Tela do fluxo de caixa diário com saldo inicial, entradas, saídas e saldo final" loading="lazy" width="1920" height="1200"></div>
+  </div>
+</section>
+<section>
+  <div class="wrap split">
+    <div class="txt">
+      <span class="tag">No bolso</span>
+      <h2>Funciona no celular, sem instalar nada</h2>
+      <p>Lance uma conta na hora em que ela chega. Abra no navegador do celular e pronto: tudo sincronizado com o computador.</p>
+      <ul class="check">
+        <li>Botão + para lançar rápido</li>
+        <li>Marque como pago com um toque</li>
+        <li>Alertas de contas vencidas</li>
+      </ul>
+    </div>
+    <div class="phone"><img src="img/app-celular.jpg" alt="Controller no celular mostrando as contas a pagar" loading="lazy" width="1170" height="2532"></div>
+  </div>
+</section>
+
+<section class="bg-soft" id="como">
+  <div class="wrap">
+    <span class="tag c">Como funciona</span>
+    <h2>Comece em 3 passos</h2>
+    <p class="sub">Você começa a usar em menos de 5 minutos.</p>
+    <div class="passos">
+      <div class="passo"><h3>Compre</h3><p>Pague com Pix, cartão ou boleto pelo Mercado Pago, com total segurança.</p></div>
+      <div class="passo"><h3>Crie sua conta</h3><p>Use o mesmo e-mail da compra. O acesso é liberado automaticamente.</p></div>
+      <div class="passo"><h3>Organize</h3><p>Cadastre suas contas ou importe o extrato e veja seu lucro aparecer.</p></div>
+    </div>
+    <div class="center" style="margin-top:40px">
+      <span class="tag c">Feito para</span>
+      <div class="chips"><span>🧑‍💼 MEI</span><span>🏪 Lojas e comércio</span><span>🛠️ Prestadores de serviço</span><span>🏢 Pequenas empresas</span><span>📊 Empresas com filiais</span><span>🙋 Quem mistura PF e PJ</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="preco" id="preco">
+  <div class="wrap">
+    <h2>Comece a enxergar seu lucro hoje</h2>
+    <p class="sub">Menos do que você perde com uma conta paga com atraso.</p>
+    <div class="box">
+      <span class="selo">ACESSO COMPLETO</span>
+      <div class="valor"><small>R$</small><span id="preco-valor">97</span></div>
+      <div style="color:var(--muted)">pagamento único</div>
+      <ul>
+        <li>Contas a pagar e a receber</li>
+        <li>Fluxo de caixa diário e mensal</li>
+        <li>DRE com suas categorias</li>
+        <li>Plano de contas, bancos, filiais e centros de custo</li>
+        <li>Importação de extrato OFX e Excel</li>
+        <li>Celular e computador, dados na nuvem</li>
+      </ul>
+      <button class="btn btn-pri btn-big" data-comprar>Comprar agora</button>
+      <p class="seguro">🔒 Pagamento seguro pelo Mercado Pago · Pix, cartão ou boleto</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="garantia">
+      <div class="selo7">7 DIAS<br>DE<br>GARANTIA</div>
+      <div>
+        <h3 style="font-size:1.35rem;margin-bottom:6px">Teste sem risco</h3>
+        <p style="color:var(--muted)">Se em até 7 dias você achar que o Controller não é para você, devolvemos 100% do valor. Sem perguntas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-soft" id="faq">
+  <div class="wrap">
+    <h2>Perguntas frequentes</h2>
+    <p class="sub">Ficou alguma dúvida? A gente responde.</p>
+    <details><summary>Preciso entender de contabilidade?</summary><p>Não. Você só lança o que paga e o que recebe. O fluxo de caixa e a DRE são montados sozinhos.</p></details>
+    <details><summary>Posso testar antes de comprar?</summary><p>Pode! <a href="app/?demo=1">Abra a demonstração grátis</a>, com dados de exemplo e sem cadastro.</p></details>
+    <details><summary>Como recebo o acesso?</summary><p>Assim que o Mercado Pago aprova o pagamento, seu e-mail é liberado automaticamente. É só criar sua conta com o mesmo e-mail da compra. Pix e cartão liberam na hora; boleto, quando compensar.</p></details>
+    <details><summary>Funciona no celular?</summary><p>Sim. Funciona no navegador do celular, tablet e computador, com os dados sincronizados.</p></details>
+    <details><summary>Consigo importar o extrato do meu banco?</summary><p>Sim. Baixe o extrato em OFX (quase todos os bancos oferecem) ou em Excel/CSV e importe. Lançamentos repetidos são detectados.</p></details>
+    <details><summary>Serve também para minhas finanças pessoais?</summary><p>Sim. Marque os lançamentos pessoais e alterne entre a visão da empresa e a pessoal.</p></details>
+    <details><summary>Meus dados ficam seguros?</summary><p>Sim. Cada usuário acessa só os próprios dados, com login e senha, e tudo é salvo automaticamente na nuvem.</p></details>
+    <details><summary>É mensalidade?</summary><p>Não. Você paga uma vez só.</p></details>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Deixe as finanças da sua empresa no azul</h2>
+    <p class="sub">Pare de adivinhar. Comece hoje a ver quanto sua empresa ganha de verdade.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-pri btn-big" data-comprar>Quero o Controller</button>
+      <a class="btn btn-big" style="background:#fff;color:var(--navy);border:1px solid var(--line)" href="app/?demo=1">Testar grátis</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Controller · Todos os direitos reservados</span>
+    <span><a href="app/">Área do cliente</a> · <a id="suporte-link" href="#">Suporte</a></span>
+  </div>
+</footer>
+
+<div class="modal-bg" id="compra" role="dialog" aria-modal="true" aria-labelledby="compra-tit">
+  <form class="modal" id="f-compra">
+    <h3 id="compra-tit">Falta pouco! 🚀</h3>
+    <p>Digite o e-mail que você vai usar para entrar no Controller. Depois do pagamento, o acesso é liberado nele automaticamente.</p>
+    <div class="err" id="compra-err"></div>
+    <label for="compra-email">Seu melhor e-mail</label>
+    <input id="compra-email" type="email" required autocomplete="email" placeholder="voce@empresa.com.br">
+    <button class="btn btn-pri" id="compra-go">Ir para o pagamento →</button>
+    <button type="button" class="cancel" id="compra-x">Cancelar</button>
+  </form>
+</div>
+
+<script>
+  (function () {
+    var bg = document.getElementById("compra"), err = document.getElementById("compra-err"), go = document.getElementById("compra-go");
+    function abrir() { bg.classList.add("on"); err.style.display = "none"; setTimeout(function () { document.getElementById("compra-email").focus(); }, 50); }
+    function fechar() { bg.classList.remove("on"); }
+    document.querySelectorAll("[data-comprar]").forEach(function (b) { b.addEventListener("click", abrir); });
+    document.getElementById("compra-x").onclick = fechar;
+    bg.addEventListener("click", function (e) { if (e.target === bg) fechar(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") fechar(); });
+    document.getElementById("f-compra").onsubmit = async function (e) {
+      e.preventDefault();
+      go.disabled = true; go.textContent = "Abrindo o Mercado Pago…"; err.style.display = "none";
+      try {
+        var r = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: document.getElementById("compra-email").value }) });
+        var d = await r.json().catch(function () { return {}; });
+        if (r.ok && d.url) { location.href = d.url; return; }
+        throw new Error(d.erro || "Não foi possível abrir o pagamento.");
+      } catch (x) {
+        err.textContent = x.message || "Sem conexão. Tente de novo."; err.style.display = "block";
+        go.disabled = false; go.textContent = "Ir para o pagamento →";
+      }
+    };
+    fetch("/api/config").then(function (r) { return r.json(); }).then(function (c) {
+      if (c.preco) document.getElementById("preco-valor").textContent = Number(c.preco).toLocaleString("pt-BR", { minimumFractionDigits: c.preco % 1 ? 2 : 0, maximumFractionDigits: 2 });
+      if (c.suporte) document.getElementById("suporte-link").href = "mailto:" + c.suporte;
+    }).catch(function () {});
+  })();
+</script>
+</body>
+</html>
