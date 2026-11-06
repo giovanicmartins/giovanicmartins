@@ -1,0 +1,98 @@
+/* Estilos do aplicativo. Dados e autenticação continuam nos arquivos originais. */
+:root{--dark:#102e58;--green:#2463df;--light:#edf3ff;--bg:#f5f7fc;--line:#e2e8f2;--muted:#5b6c84;--radius:16px;--shadow:0 3px 16px #142e5806}
+body{-webkit-font-smoothing:antialiased}
+.app{grid-template-columns:244px minmax(0,1fr)}
+.side{background:linear-gradient(175deg,#153967,#10294f);padding:30px 16px 22px;gap:6px;overflow-y:auto}
+.logo{letter-spacing:-.045em}
+.brand-icon{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#2463df;color:#fff;font-size:1.5rem;font-weight:600;flex-shrink:0}
+.side .logo{margin:0 10px 32px;font-size:1.4rem;gap:10px}
+.nav-btn{min-height:46px;padding:12px 14px;font-size:.85rem;color:#c6d5eb;border:1px solid transparent;transition:background .15s}
+.nav-btn.active{background:#ffffff14;border-color:#ffffff18;box-shadow:inset 3px 0 #80b2ff}
+.nav-btn .ic{font-size:1.05rem}
+.side .foot{border-top:1px solid #ffffff1a;padding:20px 10px 0;font-size:.75rem}
+.side .foot .btn{width:100%;margin-top:14px;border-color:#ffffff35;font-size:.8rem}
+main{padding:30px 32px 110px;max-width:1680px;width:100%;margin-inline:auto}
+.workspace-label{color:var(--muted);font-size:.65rem;letter-spacing:.14em;font-weight:600;margin-bottom:12px}
+.top{margin-bottom:26px;gap:18px}
+.top h1{font-size:1.7rem;letter-spacing:-.045em;font-weight:600}
+.top-ctrls{gap:10px}
+.mes-sel,.pill-sel{border:1px solid var(--line);box-shadow:none;border-radius:10px;font-size:.8rem;min-height:42px}
+.mes-sel span{min-width:130px}
+.mes-sel button{min-width:42px;min-height:42px;padding:6px 12px}
+.card{padding:22px;border:1px solid var(--line);box-shadow:var(--shadow)}
+.card h3{font-size:.95rem;letter-spacing:-.02em;font-weight:600;margin-bottom:18px}
+.kpi{border-top:0;border:1px solid var(--line);background:#fff;position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;top:20px;bottom:20px;width:3px;background:var(--c);border-radius:0 4px 4px 0}
+.kpi .lbl{font-size:.65rem;letter-spacing:.065em;line-height:1.6}
+.kpi .val{font-size:clamp(1.15rem,1.7vw,1.8rem);letter-spacing:-.045em;margin:10px 0 6px;font-variant-numeric:tabular-nums}
+.kpi .cmp{font-size:.72rem;line-height:1.6}
+.grid{gap:18px}
+.mt{margin-top:20px}
+.alerta{border:1px solid #d4e1fc;border-left:3px solid var(--green);padding:15px 18px;font-size:.83rem;line-height:1.7}
+.alerta.red{border:1px solid #f1d2cf;border-left:3px solid var(--red)}
+.demo-bar{background:#eaf1ff;border-bottom:1px solid #d9e5fc;font-size:.76rem;padding:10px 18px;line-height:1.7}
+.demo-bar a{text-underline-offset:3px}
+.tit{box-shadow:none;border:1px solid var(--line);border-left:3px solid transparent;padding:16px;border-radius:14px}
+.tit .nm{font-size:.88rem}
+.tit .vl{font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+th{background:#edf3ff;color:var(--dark);font-size:.74rem;padding:13px 12px}
+td{padding:12px;font-size:.8rem;font-variant-numeric:tabular-nums}
+tr:nth-child(even) td{background:#f7f9fd}
+.seg-tabs{border:1px solid var(--line);box-shadow:none;max-width:100%}
+.seg-tabs button{min-height:40px}
+.field input,.field select,.toolbar input,.toolbar select,.inp{background:#fff;min-height:44px;border-width:1px}
+.field label{font-size:.78rem}
+.check{display:block;line-height:1.8}
+.check input{vertical-align:middle;margin-right:8px;flex-shrink:0}
+.btn{min-height:44px;border-radius:10px;transition:background .15s}
+.btn.sm{min-height:36px}
+.ico-btn{min-width:36px;min-height:36px}
+.baixar{min-height:36px}
+.auth{background:radial-gradient(ellipse at 10% 10%,#315c9b 0%,transparent 55%),#102e58}
+.auth-box{max-width:440px;padding:38px 32px;border:1px solid #ffffff25;box-shadow:0 24px 80px #061a4240}
+.auth-box .logo{font-size:1.5rem;margin-bottom:28px;gap:10px}
+.auth-box h2{font-size:1.3rem;letter-spacing:-.03em}
+.auth-box p.sub{line-height:1.8;font-size:.85rem;margin-bottom:24px}
+.modal-bg{background:#071d4270;backdrop-filter:blur(4px)}
+.modal{padding:28px;max-height:calc(100dvh - 32px);box-shadow:0 24px 80px #061a4240}
+.modal h3{letter-spacing:-.025em}
+.fab{box-shadow:0 6px 22px #2463df40;right:28px}
+.toast{max-width:calc(100% - 32px);width:max-content;border-radius:12px;box-shadow:0 8px 28px #102e5830}
+:where(button,a,input,select,textarea,summary):focus-visible{outline:3px solid #5792ff;outline-offset:3px}
+button:disabled{opacity:.6;cursor:wait}
+@media(min-width:901px) and (max-height:720px){.side{padding-top:18px;gap:2px}.side .logo{margin-bottom:18px}.nav-btn{padding-block:9px;min-height:42px}}
+@media(max-width:1100px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){
+ .app{grid-template-columns:minmax(0,1fr)}
+ .side{background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 20px #102e5808;padding:6px 3px calc(6px + env(safe-area-inset-bottom));overflow-y:visible;gap:1px}
+ .nav-btn{color:#596b84;border:0;min-height:53px;border-radius:9px;padding:7px 1px;font-size:.57rem;gap:4px;flex:1}
+ .nav-btn .ic{font-size:1.05rem}
+ .nav-btn.active{color:var(--green);background:var(--light);box-shadow:inset 0 3px var(--green)}
+ main{padding:22px 18px calc(150px + env(safe-area-inset-bottom))}
+ .workspace-label{font-size:.6rem;letter-spacing:.1em}
+ .top{gap:12px;margin-bottom:20px}
+ .top h1{font-size:1.5rem}
+ .top-ctrls{gap:8px}
+ .pill-sel{min-width:0;width:0}
+ .mes-sel{order:2;flex:1 1 100%}
+ .save-st{order:3;font-size:.7rem}
+ .mobile-only{display:inline-flex!important}
+ .fab{bottom:calc(87px + env(safe-area-inset-bottom));right:18px;width:52px;height:52px}
+ .toast{bottom:calc(150px + env(safe-area-inset-bottom))}
+ .card{padding:18px}
+ .kpi .val{font-size:clamp(1.05rem,3.6vw,1.6rem);white-space:normal;overflow-wrap:anywhere;line-height:1.25}
+ .grid{gap:12px}
+ .kpi .lbl{font-size:.6rem}
+ .kpi .cmp{font-size:.66rem}
+ .chart-box{height:230px}
+ .toolbar input{flex-basis:100%;width:100%}
+ .toolbar select{flex:1;max-width:100%}
+ .field input,.field select,.field textarea,.toolbar input,.toolbar select,.inp{font-size:16px}
+ .modal{padding:22px;max-height:calc(100dvh - 24px)}
+ .modal-bg{padding:12px}
+ .tit{padding:12px}
+ .tit .vl{font-size:.85rem}
+ .demo-bar{gap:2px;padding:8px 14px;font-size:.7rem}
+}
+@media(max-width:420px){main{padding-inline:12px}.kpi{padding:16px 12px}.kpi .val{font-size:1.05rem}.auth-box{padding:28px 22px}.nav-btn{font-size:.53rem}.tit .acts{flex-wrap:wrap}.toolbar .btn{white-space:normal}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}

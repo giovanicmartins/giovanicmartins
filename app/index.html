@@ -185,12 +185,13 @@ details.mais[open] summary{margin-bottom:10px}
 @media (max-width:420px){ .kpi{padding:13px} .kpi .val{font-size:1.02rem} }
 .mobile-only{display:none!important}
 </style>
+<link rel="stylesheet" href="../assets/app.css">
 </head>
 <body>
 
 <section id="auth" class="auth hidden">
   <div class="auth-box">
-    <div class="logo">📈 Controller</div>
+    <div class="logo"><span class="brand-icon" aria-hidden="true">↗</span> Controller</div>
     <div id="auth-content"></div>
   </div>
 </section>
@@ -200,8 +201,8 @@ details.mais[open] summary{margin-bottom:10px}
   <a id="demo-buy" href="#">Comprar acesso completo →</a>
 </div>
 <div id="app" class="app hidden">
-  <aside class="side">
-    <div class="logo">📈 Controller</div>
+  <aside class="side" aria-label="Navegação principal">
+    <div class="logo"><span class="brand-icon" aria-hidden="true">↗</span> Controller</div>
     <button class="nav-btn" data-view="painel"><span class="ic">📊</span>Painel</button>
     <button class="nav-btn" data-view="pagar"><span class="ic">📤</span>A pagar</button>
     <button class="nav-btn" data-view="receber"><span class="ic">📥</span>A receber</button>
@@ -214,7 +215,8 @@ details.mais[open] summary{margin-bottom:10px}
       <button id="logout" class="btn ghost sm">Sair</button>
     </div>
   </aside>
-  <main>
+  <main id="conteudo">
+    <p class="workspace-label">VISÃO FINANCEIRA · CONTROLLER</p>
     <div class="top">
       <h1 id="view-title">Painel</h1>
       <div class="top-ctrls">

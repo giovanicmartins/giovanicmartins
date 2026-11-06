@@ -1,0 +1,73 @@
+/* Camada visual da página de vendas. Integrações permanecem no HTML. */
+:root{--navy:#102e58;--blue:#2463df;--blue2:#5792ff;--sky:#edf3ff;--sky2:#f6f8fc;--muted:#586980;--line:#dfe7f2}
+body{-webkit-font-smoothing:antialiased}
+.wrap{max-width:1200px;padding-inline:28px}
+section[id]{scroll-margin-top:96px}
+header.nav{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+header.nav .wrap{height:78px}
+header.nav .logo{color:var(--navy);font-size:1.45rem;letter-spacing:-.05em}
+.logo i{box-shadow:0 4px 10px #2463df25}
+.nav-links{gap:24px}
+.nav-links a{color:var(--muted);font-size:.85rem}
+.nav-links a:hover{color:var(--blue)}
+.nav-links .btn{background:var(--blue);color:#fff;padding:11px 18px}
+.nav-links .btn:hover{background:var(--navy)}
+.hero{background:radial-gradient(ellipse at 20% 0%,#234d8e 0%,transparent 55%),radial-gradient(ellipse at 95% 85%,#214b91 0%,transparent 55%),#102e58;padding-top:84px}
+h1{font-size:clamp(2.3rem,5.2vw,4rem);line-height:1.13;letter-spacing:-.045em}
+.hero-highlight{color:#a8caff}
+.hero .tag{border:1px solid #83b3ff44;background:#ffffff08;border-radius:99px;padding:7px 15px;font-size:.7rem;letter-spacing:.08em;margin-bottom:23px}
+.hero p.lead{font-size:1.05rem;line-height:1.85;max-width:620px;margin-top:24px}
+.hero .mini{line-height:1.9;margin-top:22px}
+.btn{min-height:46px;border-radius:10px;transition:background .2s,box-shadow .2s,transform .2s}
+.btn-big{padding:16px 26px;font-size:.95rem}
+.btn-pri{box-shadow:0 6px 18px #2463df28}
+.hero .btn-pri{background:#fff;color:var(--navy);box-shadow:0 8px 26px #05142935}
+.hero .btn-pri:hover{background:#e1ecff}
+.hero .btn-line{border-color:#9fbde060;color:#e5efff}
+.shot{margin-top:54px;border-width:1px;border-color:#ffffff45;border-radius:16px 16px 0 0;box-shadow:0 0 0 8px #ffffff08,0 20px 70px #061a4250}
+.shot .barra{height:36px;background:#f1f5fc}
+.faixa{background:#fff;padding:30px 0}
+.faixa .grid>div+div{border-left:1px solid var(--line)}
+.faixa b{font-size:1.25rem;letter-spacing:-.03em}
+.faixa span{font-size:.8rem}
+h2{letter-spacing:-.035em;line-height:1.25}
+.sub{font-size:1rem;line-height:1.85}
+.card,.passo,.dor{border-radius:18px;padding:26px;border-color:#e4ebf5;box-shadow:0 4px 12px #142e5803}
+.card .ico{background:#eff4ff;border:1px solid #e1eaff;border-radius:14px;width:48px;height:48px}
+.card h3{margin-bottom:10px;letter-spacing:-.015em}
+.card p,.passo p{line-height:1.8}
+.passo::before{border-radius:14px;background:var(--sky);color:var(--blue)}
+.frame{box-shadow:0 16px 50px #142e5810}
+.preco{background:radial-gradient(ellipse at top,#234d8e,transparent 70%),#102e58}
+.box{box-shadow:0 24px 60px #061a4240;border:1px solid #ffffff30}
+.box .selo{padding:7px 14px}
+.modal{box-shadow:0 24px 80px #061a4255;max-height:calc(100dvh - 32px);overflow:auto}
+:where(a,button,input,summary):focus-visible{outline:3px solid #65a0ff;outline-offset:4px}
+.btn:disabled{opacity:.65;cursor:wait}
+@media(max-width:900px){
+ .nav-links a.nav-login{display:inline-flex}
+ .hero{padding-top:60px}
+ .faixa .grid>div+div{border-left:0}
+ .faixa .grid{row-gap:24px}
+}
+@media(max-width:600px){
+ .wrap{padding-inline:20px}
+ header.nav .wrap{height:68px;gap:8px}
+ header.nav .logo{font-size:1.12rem;gap:6px}
+ .logo i{width:26px;height:26px}
+ .nav-links{gap:12px}
+ .nav-links a.nav-login{font-size:.76rem}
+ .nav-links .btn{padding:9px 12px;font-size:.74rem;min-height:42px}
+ .hero{padding-top:44px}
+ .hero .tag{font-size:.6rem;padding:6px 10px;letter-spacing:.035em}
+ h1{font-size:clamp(1.9rem,7.7vw,2.6rem)}
+ .hero p.lead{font-size:.94rem;line-height:1.8;margin:20px auto 24px}
+ .hero .mini{font-size:.73rem}
+ .shot{margin-top:36px}
+ section{padding-block:52px}
+ .card,.passo,.dor{padding:22px}
+ .box{padding:28px 22px}
+ .split{gap:24px}
+ footer .wrap{flex-direction:column;font-size:.8rem}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
