@@ -4,13 +4,17 @@
   "type": "module",
   "scripts": {
     "dev": "node dev-server.mjs",
-    "test": "node testes/api.test.mjs"
+    "test": "node testes/api.test.mjs",
+    "test:ui": "node --test testes/*-ui.test.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "1.1.0"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "0.5.15"
+    "@electric-sql/pglite": "0.5.15",
+    "jsdom": "^26.1.0"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }

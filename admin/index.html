@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Admin — Controller</title>
+<link rel="stylesheet" href="../assets/senha.css">
+<link rel="icon" type="image/svg+xml" href="../img/logo.svg">
 <style>
   :root{--dark:#0a2a5e;--green:#1f5fd6;--light:#e8effc;--red:#c0392b;--line:#e1e7f2;--muted:#5b6782;--bg:#f3f6fc}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -25,11 +27,14 @@
   .msg.err{background:#fdecea;color:var(--red)}
   .hidden{display:none}
   .tbl{overflow-x:auto}
+  .admin-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.35rem;color:var(--dark);margin-bottom:20px}
+  .admin-brand img{display:block;width:36px;height:36px;flex-shrink:0}
 </style>
 </head>
 <body>
 <div class="box">
-  <h1>🔐 Administração</h1>
+  <div class="admin-brand"><img src="../img/logo.svg" width="36" height="36" alt=""><span>Controller</span></div>
+  <h1>Administração</h1>
   <p class="sub">Quem paga pelo Mercado Pago é liberado automaticamente. Aqui você também pode liberar à mão (ex.: venda por fora), remover ou gerar nova senha.</p>
   <div id="msg" class="msg hidden"></div>
 
@@ -49,7 +54,9 @@
     </table></div>
   </div>
 </div>
+<script src="../app/senha.js"></script>
 <script>
+  window.ControllerSenha.ligarOlhos(document.getElementById("f-login"));
   let chave = sessionStorage.getItem("gnc-admin") || "";
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

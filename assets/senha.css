@@ -1,0 +1,6 @@
+/* Botão de mostrar/ocultar senha, compartilhado pelo app e admin. */
+.password-input{position:relative;width:100%;min-width:0;flex:1}
+.password-input input{width:100%;min-width:0;padding-right:52px}
+.password-input .password-toggle{position:absolute;right:4px;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:40px;height:36px;min-height:36px;padding:0;border:0;border-radius:8px;color:#2463df;background:transparent;cursor:pointer}
+.password-input .password-toggle:hover{background:#edf3ff}
+.password-toggle:focus-visible{outline:3px solid #5792ff;outline-offset:1px}
