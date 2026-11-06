@@ -63,7 +63,7 @@ Depois abra **Deployments → ⋯ → Redeploy**.
 2. Em **Domains**, adicione o domínio do seu site e siga os passos.
 3. Em **API Keys**, crie uma chave e coloque em `RESEND_API_KEY` na Vercel.
 
-Segurança do login: depois de 5 senhas erradas, o e-mail fica bloqueado por 15 minutos. Gerar nova senha no `/admin` desbloqueia na hora.
+Segurança do login: depois de 5 senhas erradas, o e-mail fica bloqueado por 15 minutos e o cliente recebe um e-mail de aviso com o link para criar nova senha. Gerar nova senha no `/admin` desbloqueia na hora.
 
 ⚠️ Nunca coloque o Access Token nem a Assinatura secreta dentro do código ou no GitHub. Eles ficam **só** nas variáveis da Vercel.
 

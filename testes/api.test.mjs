@@ -82,7 +82,9 @@ r=await f("/api/login",{m:"POST",body:{email:E,senha:"nova123"}});t("login com s
 ck="";
 for(let i=0;i<5;i++) r=await f("/api/login",{m:"POST",body:{email:E,senha:"x"+i}});
 t("5 erros ainda 401",r.s==401,r.s);
+const av=emails[emails.length-1];t("e-mail de aviso de bloqueio enviado",emails.length==2&&/Aviso de segurança/.test(av.subject)&&/redefinir=/.test(av.html),emails.length);
 r=await f("/api/login",{m:"POST",body:{email:E,senha:"nova123"}});t("6a tentativa bloqueada 429",r.s==429,JSON.stringify(r.j));
+t("aviso enviado so uma vez",emails.length==2,emails.length);
 r=await f("/api/admin",{m:"POST",body:{acao:"resetar",email:E},h:{"x-admin-key":"admin-local"}});
 r=await f("/api/login",{m:"POST",body:{email:E,senha:r.j.senha}});t("admin resetar desbloqueia",r.s==200,r.s);
 console.log(`\n${ok} ok, ${falha} falhas`);fim(falha ? 1 : 0);
