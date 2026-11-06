@@ -24,7 +24,7 @@ http.createServer((req,res)=>{let b="";req.on("data",d=>b+=d);req.on("end",()=>{
 let ck="";
 async function f(p,{m="GET",body,h={}}={}){const r=await fetch(B+p,{method:m,headers:{"content-type":"application/json",cookie:ck,...h},body:body&&JSON.stringify(body)});const sc=r.headers.get("set-cookie");if(sc)ck=sc.split(";")[0];let j;try{j=await r.json()}catch{j=null}return{s:r.status,j}}
 function assin(id){const ts=Date.now()+"",rid="req1";return{"x-signature":`ts=${ts},v1=`+crypto.createHmac("sha256","segredo-wh").update(`id:${id};request-id:${rid};ts:${ts};`).digest("hex"),"x-request-id":rid}}
-const E="cli@teste.com";
+const E="cli@teste.com";let chave;
 let r=await f("/api/config");t("config",r.s==200,JSON.stringify(r.j));
 r=await f("/api/checkout",{m:"POST",body:{email:E}});t("checkout",r.s==200&&r.j.url,JSON.stringify(r.j));
 r=await f("/api/cadastro",{m:"POST",body:{email:E,senha:"123456"}});t("cadastro sem compra bloqueado",r.s==403);
@@ -44,6 +44,20 @@ r=await f("/api/login",{m:"POST",body:{email:E,senha:"errada"}});t("login senha 
 r=await f("/api/login",{m:"POST",body:{email:E.toUpperCase(),senha:"123456"}});t("login",r.s==200);
 r=await f("/api/admin",{m:"POST",body:{acao:"listar"}});t("admin sem senha",r.s==401);
 r=await f("/api/admin",{m:"POST",body:{acao:"listar"},h:{"x-admin-key":"admin-local"}});t("admin listar",r.j?.compradores?.length==1,JSON.stringify(r.j));
+r=await f("/api/chaves",{m:"POST",body:{nome:"ERP"}});chave=r.j?.chave;t("criar chave",r.s==200&&/^ctrl_/.test(chave||""),r.s);
+r=await f("/api/chaves");t("listar chaves sem mostrar a chave",r.j?.chaves?.length==1&&!JSON.stringify(r.j).includes(chave));
+const salvoCk=ck;ck="";
+r=await f("/api/integracao");t("integracao sem chave 401",r.s==401);
+r=await f("/api/integracao",{h:{authorization:"Bearer ctrl_"+"x".repeat(30)}});t("integracao chave falsa 401",r.s==401);
+r=await f("/api/integracao",{h:{authorization:"Bearer "+chave}});t("integracao sem dados do app 409",r.s==409,r.s);
+ck=salvoCk;await f("/api/dados",{m:"PUT",body:{conteudo:{plano:[],contas:[{id:"c1",nome:"Conta"}],titulos:[]},versao:2}});ck="";
+r=await f("/api/integracao",{m:"POST",h:{authorization:"Bearer "+chave},body:{titulos:[{tipo:"Receita",descricao:"Venda loja",valor:"150.5",venc:"2026-11-06",externoId:"v1"}]}});t("integracao cria titulo",r.j?.criados?.length==1,JSON.stringify(r.j));
+r=await f("/api/integracao",{m:"POST",h:{authorization:"Bearer "+chave},body:{titulos:[{tipo:"Receita",descricao:"Venda loja",valor:150.5,venc:"2026-11-06",externoId:"v1"}]}});t("integracao nao duplica externoId",r.j?.ignorados==1,JSON.stringify(r.j));
+r=await f("/api/integracao",{m:"POST",h:{authorization:"Bearer "+chave},body:{titulos:[{tipo:"Outro",descricao:"x",valor:1,venc:"2026-11-06"}]}});t("integracao valida tipo 400",r.s==400,JSON.stringify(r.j));
+r=await f("/api/integracao?tipo=titulos",{h:{authorization:"Bearer "+chave}});t("integracao le titulos",r.j?.titulos?.[0]?.valor==150.5&&r.j.titulos[0].contaId=="c1",JSON.stringify(r.j));
+ck=salvoCk;r=await f("/api/dados");t("app ve titulo da integracao",r.j?.conteudo?.titulos?.length==1&&r.j.versao==4,r.j?.versao);
+r=await f("/api/chaves");r=await f("/api/chaves",{m:"DELETE",body:{id:r.j.chaves[0].id}});t("apagar chave",r.s==200);ck="";
+r=await f("/api/integracao",{h:{authorization:"Bearer "+chave}});t("chave apagada nao funciona",r.s==401);ck=salvoCk;
 r=await f("/api/admin",{m:"POST",body:{acao:"resetar",email:E},h:{"x-admin-key":"admin-local"}});t("admin resetar",!!r.j?.senha);
 pagamentos["111"].status="refunded";
 r=await f("/api/mercadopago?data.id=111&type=payment",{m:"POST",body:{type:"payment",data:{id:"111"}},h:assin("111")});t("reembolso remove",r.j?.resultado=="removido");
