@@ -83,3 +83,11 @@ npm test
 - `npm test`: testes originais do back-end do Claude, sem alterações.
 
 Verificação desta atualização: instalação limpa com `npm ci`, 25 testes de interface e 50 verificações do back-end aprovados, mais inspeção das telas e da logo no navegador. O envio de e-mail em produção depende da configuração de e-mail descrita pelo Claude; os testes usam ambiente local.
+
+## Integrações bancárias — preparação
+
+Em **Cadastros → Integrações bancárias**, escolha Itaú, Sicredi, Sicoob, Bradesco, Inter ou Nubank. Use **Preparar configuração** para vincular uma conta corrente cadastrada. Todas as conexões continuam pendentes; a tela ainda não emite boletos nem confirma recebimentos.
+
+O botão **Solicitar outro banco** salva o interesse na conta, com data e observação opcional. O formulário informa que isso ainda não envia um pedido à equipe. Os detalhes de implementação e o trabalho necessário no back-end estão em `BANCOS-PARA-O-BACK.md`.
+
+A interface está em `app/bancos.js`; o salvamento usa o mecanismo existente do app. Não há campos de credenciais bancárias. Os testes ficam em `testes/bancos-ui.test.mjs` e fazem parte de `npm run test:ui`.

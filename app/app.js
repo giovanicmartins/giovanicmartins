@@ -240,9 +240,11 @@
   // ================= RENDER =================
   const TITULOS = { painel: "Painel", pagar: "Contas a pagar", receber: "Contas a receber", fluxo: "Fluxo de caixa", dre: "DRE — Demonstração do Resultado", cadastros: "Cadastros", metas: "Metas" };
   let fecharChaves = () => {};
+  let fecharBancos = () => {};
   function render() {
     fecharChaves();
     fecharChaves = () => {};
+    fecharBancos(); fecharBancos = () => {};
     limparCharts();
     $$(".nav-btn").forEach((b) => b.classList.toggle("active", b.dataset.view === ui.view));
     $("#view-title").textContent = TITULOS[ui.view];
@@ -525,8 +527,14 @@
   // ---------- CADASTROS ----------
   const DIMS = { centros: ["centroId", "Centro de custo", "Centros de custo", "🎯"], verticais: ["verticalId", "Vertical", "Verticais", "🧭"], filiais: ["filialId", "Filial", "Filiais", "🏬"] };
   function telaCadastros() {
-    const abas = [["plano", "📒 Plano de contas"], ["dre", "📑 Categorias da DRE"], ["contas", "🏦 Bancos e contas"], ["centros", "🎯 Centros de custo"], ["verticais", "🧭 Verticais"], ["filiais", "🏬 Filiais"], ["chaves", "🔑 Chaves de integração"]];
+    const abas = [["plano", "📒 Plano de contas"], ["dre", "📑 Categorias da DRE"], ["contas", "🏦 Bancos e contas"], ["centros", "🎯 Centros de custo"], ["verticais", "🧭 Verticais"], ["filiais", "🏬 Filiais"], ["chaves", "🔑 Chaves de integração"], ["bancos", "🔗 Integrações bancárias"]];
     const topo = `<div class="toolbar"><div class="seg-tabs">${abas.map(([k, l]) => `<button data-cad="${k}" class="${ui.cad === k ? "on" : ""}">${l}</button>`).join("")}</div></div>`;
+    if (ui.cad === "bancos") {
+      $("#view").innerHTML = topo + '<div id="integracoes-bancarias"></div>';
+      $$("[data-cad]").forEach((b) => (b.onclick = () => { ui.cad = b.dataset.cad; render(); }));
+      fecharBancos = window.ControllerBancos.abrir($("#integracoes-bancarias"), { estado: S, salvar, demo: modo === "demo", suporte: cfg.suporte });
+      return;
+    }
     if (ui.cad === "chaves") {
       $("#view").innerHTML = topo + '<div id="chaves-integracao"></div>';
       $$("[data-cad]").forEach((b) => (b.onclick = () => { ui.cad = b.dataset.cad; render(); }));
