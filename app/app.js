@@ -239,7 +239,10 @@
 
   // ================= RENDER =================
   const TITULOS = { painel: "Painel", pagar: "Contas a pagar", receber: "Contas a receber", fluxo: "Fluxo de caixa", dre: "DRE — Demonstração do Resultado", cadastros: "Cadastros", metas: "Metas" };
+  let fecharChaves = () => {};
   function render() {
+    fecharChaves();
+    fecharChaves = () => {};
     limparCharts();
     $$(".nav-btn").forEach((b) => b.classList.toggle("active", b.dataset.view === ui.view));
     $("#view-title").textContent = TITULOS[ui.view];
@@ -522,8 +525,14 @@
   // ---------- CADASTROS ----------
   const DIMS = { centros: ["centroId", "Centro de custo", "Centros de custo", "🎯"], verticais: ["verticalId", "Vertical", "Verticais", "🧭"], filiais: ["filialId", "Filial", "Filiais", "🏬"] };
   function telaCadastros() {
-    const abas = [["plano", "📒 Plano de contas"], ["dre", "📑 Categorias da DRE"], ["contas", "🏦 Bancos e contas"], ["centros", "🎯 Centros de custo"], ["verticais", "🧭 Verticais"], ["filiais", "🏬 Filiais"]];
+    const abas = [["plano", "📒 Plano de contas"], ["dre", "📑 Categorias da DRE"], ["contas", "🏦 Bancos e contas"], ["centros", "🎯 Centros de custo"], ["verticais", "🧭 Verticais"], ["filiais", "🏬 Filiais"], ["chaves", "🔑 Chaves de integração"]];
     const topo = `<div class="toolbar"><div class="seg-tabs">${abas.map(([k, l]) => `<button data-cad="${k}" class="${ui.cad === k ? "on" : ""}">${l}</button>`).join("")}</div></div>`;
+    if (ui.cad === "chaves") {
+      $("#view").innerHTML = topo + '<div id="chaves-integracao"></div>';
+      $$("[data-cad]").forEach((b) => (b.onclick = () => { ui.cad = b.dataset.cad; render(); }));
+      fecharChaves = window.ControllerChaves.abrir($("#chaves-integracao"), { api, demo: modo === "demo" });
+      return;
+    }
     let html = "";
     if (ui.cad === "plano") {
       html = `<div class="card tree"><h3>📒 Plano de contas <span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn ghost sm" id="exp-plano">⬇️ Exportar</button><button class="btn sm" id="nova-raiz">+ Conta principal</button></span></h3>

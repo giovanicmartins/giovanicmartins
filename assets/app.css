@@ -96,3 +96,27 @@ button:disabled{opacity:.6;cursor:wait}
 }
 @media(max-width:420px){main{padding-inline:12px}.kpi{padding:16px 12px}.kpi .val{font-size:1.05rem}.auth-box{padding:28px 22px}.nav-btn{font-size:.53rem}.tit .acts{flex-wrap:wrap}.toolbar .btn{white-space:normal}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+
+/* Chaves de integração: acessíveis em Cadastros. */
+.integration-card{max-width:880px}
+.integration-card h2{font-size:1.2rem;letter-spacing:-.03em;margin-bottom:8px}
+.integration-notice{padding:14px 16px;background:var(--light);border:1px solid #d4e1fc;border-radius:12px;font-size:.83rem;line-height:1.8;margin:20px 0}
+.integration-create{display:flex;align-items:flex-start;gap:14px;margin:24px 0}
+.integration-create .field{flex:1;margin:0}
+.integration-create .btn{margin-top:24px}
+.integration-list-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 12px;flex-wrap:wrap}
+.integration-list-heading h3{margin:0}
+.integration-list{list-style:none}
+.integration-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.integration-row:last-child{border-bottom:0}
+.integration-info{display:grid;gap:6px;min-width:0;overflow-wrap:anywhere}
+.integration-info strong{font-size:.9rem}
+.integration-info code{color:var(--dark);font-size:.83rem}
+.integration-secret{background:#f0f5ff;border:1px solid #a6c3fa;border-radius:14px;padding:22px;margin:20px 0}
+.integration-secret p,.integration-dialog p{font-size:.85rem;line-height:1.8;margin:12px 0}
+.integration-secret label{display:block;font-size:.8rem;font-weight:600;margin:16px 0 6px}
+.integration-secret textarea{display:block;width:100%;resize:vertical;min-height:90px;padding:12px;border:1px solid #b4c9ec;border-radius:10px;background:#fff;font-family:ui-monospace,monospace;font-size:16px;overflow-wrap:anywhere}
+.integration-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.integration-dialog{margin:auto;width:calc(100% - 32px);max-width:460px;border:1px solid var(--line);border-radius:18px;padding:26px;color:var(--text);background:#fff;max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 24px 80px #061a4240}
+.integration-dialog::backdrop{background:#071d4270;backdrop-filter:blur(4px)}
+@media(max-width:600px){.integration-create{flex-direction:column}.integration-create .field{width:100%}.integration-create .btn{margin:0;width:100%}.integration-secret{padding:16px}.integration-actions .btn{flex:1;white-space:normal}.integration-row{gap:10px}.integration-info .muted{font-size:.74rem}.integration-row>.btn{flex-shrink:0}}

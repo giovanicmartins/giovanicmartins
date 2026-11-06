@@ -39,3 +39,25 @@ Nenhuma mudança em `api/`, `lib/`, `app/app.js`, pagamentos, servidor ou depend
 4. Acesse `http://localhost:3000/app/?demo=1` para a demonstração.
 
 O PR de front-end deve ser comparado com a branch do PR #1 para mostrar apenas estas alterações visuais.
+
+## Chaves de integração
+
+No app, abra **Cadastros → Chaves de integração**.
+
+1. Digite um nome (por exemplo, “Minha loja”) e clique em **Criar nova chave**.
+2. Use **Copiar chave** e guarde em um local seguro.
+3. Clique em **Já guardei a chave**. A chave completa não aparece novamente; a lista exibe apenas os quatro caracteres finais e a data de criação.
+4. Para revogar o acesso, clique em **Apagar** e confirme. O sistema conectado deixa de ter acesso imediatamente.
+
+A tela usa `GET`, `POST` e `DELETE /api/chaves`, já disponíveis no back-end do PR #1. O limite de dez chaves é explicado na tela. Na demonstração, as operações de chaves ficam desativadas para não criar credenciais reais.
+
+A interface está em `app/chaves.js`, com estilos em `assets/app.css`. O segredo fica apenas no aviso temporário; não é salvo em localStorage nem sessionStorage. Se a cópia automática não estiver disponível, a interface seleciona o texto para cópia manual.
+
+Validação desta tela: dez testes de interface, criação/cópia/exclusão contra a API original em ambiente local descartável, sem alterações no back-end, e conferência visual no computador e celular.
+
+Os testes estão em `testes/chaves-ui.test.mjs` e usam jsdom apenas para teste. Para executá-los sem alterar as dependências do projeto:
+
+```sh
+npm install --prefix /tmp/controller-chaves-tests jsdom --no-audit --no-fund
+NODE_PATH=/tmp/controller-chaves-tests/node_modules node --test testes/chaves-ui.test.mjs
+```
