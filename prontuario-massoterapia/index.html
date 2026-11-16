@@ -1,0 +1,260 @@
+<title>Prontuário Dalila Massoterapia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: barra lateral de navegação (vira abas no celular) + área de formulário em seções */
+:root {
+  --bg: #f3f6f4; --surface: #ffffff; --fg: #1d2a26; --muted: #5f706a;
+  --line: #d9e2de; --accent: #2f7a66; --accent-soft: #e1efea; --accent-fg: #ffffff;
+  --warn: #b5651d; --warn-soft: #fbeee2;
+  --f-display: "Outfit", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121a17; --surface: #1a2420; --fg: #e4ece8; --muted: #93a59e;
+  --line: #2c3a35; --accent: #5cb89c; --accent-soft: #1f3530; --accent-fg: #0d1613;
+  --warn: #e3a066; --warn-soft: #36271a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121a17; --surface: #1a2420; --fg: #e4ece8; --muted: #93a59e;
+  --line: #2c3a35; --accent: #5cb89c; --accent-soft: #1f3530; --accent-fg: #0d1613;
+  --warn: #e3a066; --warn-soft: #36271a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 15px; line-height: 1.5 }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0 }
+.app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh }
+nav { background: var(--surface); border-right: 1px solid var(--line); padding: 24px 16px; display: flex; flex-direction: column; gap: 4px }
+.brand { font-family: var(--f-display); font-size: 20px; font-weight: 700; color: var(--accent); padding: 0 8px 4px }
+.brand small { display: block; font-family: var(--f-body); font-size: 12px; font-weight: 500; color: var(--muted) }
+.navlabel { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 16px 8px 4px }
+nav a { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: var(--fg); text-decoration: none; font-weight: 500 }
+nav a .n { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--accent-soft); color: var(--accent); font-weight: 600; flex: none }
+nav a:hover { background: var(--accent-soft) }
+nav a.on { background: var(--accent); color: var(--accent-fg) }
+nav a.on .n { background: var(--accent-fg); color: var(--accent) }
+nav a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+
+main { padding-block: 28px 60px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); min-width: 0 }
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px }
+.banner { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 8px 12px; font-size: 13px; font-weight: 500 }
+.head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px }
+.head h1 { font-size: 28px }
+.head p { margin: 4px 0 0; color: var(--muted) }
+.patient-chip { font-size: 13px; color: var(--muted) }
+.patient-chip b { color: var(--fg) }
+
+section.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px }
+section.card h2 { font-size: 17px; display: flex; gap: 8px; align-items: baseline }
+section.card h2 span { font-family: var(--f-body); font-size: 12px; font-weight: 500; color: var(--muted) }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 16px }
+.full { grid-column: 1 / -1 }
+label.f { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 500; min-width: 0 }
+input, select, textarea { font: inherit; font-size: 14px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; width: 100% }
+textarea { min-height: 76px; resize: vertical }
+.hint { font-weight: 400; color: var(--muted); font-size: 12px }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { position: relative }
+.chip input { position: absolute; opacity: 0; width: 1px; height: 1px }
+.chip span { display: inline-block; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; cursor: pointer; background: var(--bg) }
+.chip input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-fg) }
+.chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px }
+.chip.alert input:checked + span { background: var(--warn); border-color: var(--warn); color: var(--surface) }
+
+.scale { display: flex; flex-direction: column; gap: 6px }
+.scale .row { display: flex; align-items: center; gap: 12px }
+.scale input[type=range] { padding: 0; accent-color: var(--accent); border: 0; background: none }
+.scale output { font-family: var(--f-display); font-weight: 700; font-size: 20px; width: 36px; text-align: right; font-variant-numeric: tabular-nums; color: var(--accent) }
+.scale .ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted) }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end }
+button { font: inherit; font-weight: 600; font-size: 14px; border-radius: 8px; padding: 10px 18px; cursor: pointer; border: 1px solid var(--accent) }
+.btn-primary { background: var(--accent); color: var(--accent-fg) }
+.btn-ghost { background: transparent; color: var(--accent) }
+
+.search { display: flex; flex-wrap: wrap; gap: 10px }
+.search input { flex: 1 1 220px }
+.tablewrap { overflow-x: auto }
+table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px }
+th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--line) }
+td { padding: 12px 10px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums }
+tr.click { cursor: pointer }
+tr.click:hover td { background: var(--accent-soft) }
+.pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--accent-soft); color: var(--accent) }
+.pill.w { background: var(--warn-soft); color: var(--warn) }
+
+.timeline { display: flex; flex-direction: column; gap: 12px }
+.sess { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; grid-template-columns: 1fr auto; gap: 6px 16px }
+.sess h3 { font-size: 15px }
+.sess .meta { color: var(--muted); font-size: 13px }
+.sess .pain { grid-row: 1 / 3; grid-column: 2; display: flex; align-items: center; gap: 6px; font-family: var(--f-display); font-weight: 700; font-size: 18px; font-variant-numeric: tabular-nums }
+.sess .pain small { font-family: var(--f-body); font-size: 11px; font-weight: 500; color: var(--muted); display: block; text-align: center }
+.sess p { grid-column: 1 / -1; margin: 4px 0 0; font-size: 14px }
+.arrow { color: var(--muted) }
+.down { color: var(--accent) }
+
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500 }
+
+@media (max-width: 760px) {
+  .app { grid-template-columns: 1fr }
+  nav { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 10px max(16px, env(safe-area-inset-left, 0px)); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; gap: 6px }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface) }
+  .brand, .navlabel { display: none }
+  nav a { white-space: nowrap; flex: none }
+}
+@media (prefers-reduced-motion: no-preference) { nav a, .chip span { transition: background .15s } }
+</style>
+
+<div class="app">
+  <nav aria-label="Telas">
+    <div class="brand">Dalila<small>Massoterapia · Prontuário</small></div>
+    <div class="navlabel">Telas</div>
+    <a href="#pacientes"><span class="n">1</span>Pacientes</a>
+    <a href="#cadastro"><span class="n">2</span>Cadastro</a>
+    <a href="#anamnese"><span class="n">3</span>Anamnese</a>
+    <a href="#sessao"><span class="n">4</span>Nova sessão</a>
+    <a href="#historico"><span class="n">5</span>Histórico</a>
+  </nav>
+  <main><div class="wrap" id="view"></div></main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const regioes = ["Cabeça","Rosto","Pescoço","Ombros","Costas (alta)","Costas (meio)","Lombar","Braços","Mãos","Abdômen","Quadril / glúteos","Coxas","Joelhos","Panturrilhas","Pés"];
+const pacientes = [
+  {nome:"Maria Aparecida Souza", idade:52, tel:"(11) 98765-4321", ultima:"12/11/2026", sessoes:6, queixa:"Dor lombar"},
+  {nome:"João Pedro Lima", idade:34, tel:"(11) 91234-5678", ultima:"08/11/2026", sessoes:3, queixa:"Tensão no pescoço"},
+  {nome:"Ana Clara Ribeiro", idade:28, tel:"(11) 99876-1122", ultima:"30/10/2026", sessoes:1, queixa:"Retenção de líquido", alerta:"Gestante"},
+];
+
+const chips = (name, items, cls="") => `<div class="chips">${items.map((t,i)=>`<label class="chip ${cls}"><input type="checkbox" id="${name}-${i}" name="${name}"><span>${t}</span></label>`).join("")}</div>`;
+const radios = (name, items) => `<div class="chips">${items.map((t,i)=>`<label class="chip"><input type="radio" id="${name}-${i}" name="${name}" ${i===0?"checked":""}><span>${t}</span></label>`).join("")}</div>`;
+const field = (label, input, cls="") => `<label class="f ${cls}">${label}${input}</label>`;
+const inp = (id, type="text", ph="") => `<input id="${id}" type="${type}" placeholder="${ph}">`;
+const area = (id, ph="") => `<textarea id="${id}" placeholder="${ph}"></textarea>`;
+const sel = (id, opts) => `<select id="${id}">${opts.map(o=>`<option>${o}</option>`).join("")}</select>`;
+const scale = (id, label, left="Nenhuma", right="Máxima", val=0) => `<div class="scale"><label class="f" for="${id}">${label}</label><div class="row"><input type="range" id="${id}" min="0" max="10" value="${val}" oninput="this.nextElementSibling.value=this.value"><output>${val}</output></div><div class="ends"><span>0 · ${left}</span><span>10 · ${right}</span></div></div>`;
+const card = (title, sub, body) => `<section class="card"><h2>${title}${sub?`<span>${sub}</span>`:""}</h2>${body}</section>`;
+const head = (t, p, pac=true) => `<div class="banner">Esboço inicial · os dados são exemplos e nada é salvo ainda</div><div class="head"><div><h1>${t}</h1><p>${p}</p></div>${pac?`<div class="patient-chip">Paciente: <b>Maria Aparecida Souza</b> · 52 anos</div>`:""}</div>`;
+const actions = (label) => `<div class="actions"><button class="btn-ghost" type="button" onclick="toast('Cancelado')">Cancelar</button><button class="btn-primary" type="button" onclick="toast('No esboço nada é salvo ainda')">${label}</button></div>`;
+
+const telas = {
+pacientes: () => head("Pacientes", "Lista de todos os pacientes atendidos. Toque em um nome para abrir o prontuário.", false) +
+  `<div class="search"><input id="busca" placeholder="Buscar por nome ou telefone"><button class="btn-primary" type="button" onclick="location.hash='cadastro'">+ Novo paciente</button></div>
+  <section class="card"><div class="tablewrap"><table><thead><tr><th>Nome</th><th>Idade</th><th>Telefone</th><th>Queixa principal</th><th>Sessões</th><th>Última sessão</th></tr></thead><tbody>
+  ${pacientes.map(p=>`<tr class="click" onclick="location.hash='historico'"><td><b>${p.nome}</b>${p.alerta?` <span class="pill w">${p.alerta}</span>`:""}</td><td>${p.idade}</td><td>${p.tel}</td><td>${p.queixa}</td><td>${p.sessoes}</td><td>${p.ultima}</td></tr>`).join("")}
+  </tbody></table></div></section>`,
+
+cadastro: () => head("Cadastro do paciente", "Dados pessoais e de contato. Preenchido uma vez, no primeiro atendimento.", false) +
+  card("Dados pessoais","", `<div class="grid">
+    ${field("Nome completo", inp("nome","text","Ex.: Maria Aparecida Souza"), "full")}
+    ${field("Data de nascimento", inp("nasc","date"))}
+    ${field("Sexo", sel("sexo",["Feminino","Masculino","Outro","Prefere não informar"]))}
+    ${field("CPF <span class='hint'>(opcional)</span>", inp("cpf","text","000.000.000-00"))}
+    ${field("Profissão", inp("prof","text","Ex.: professora"))}
+  </div>`) +
+  card("Contato","", `<div class="grid">
+    ${field("Telefone / WhatsApp", inp("tel","tel","(11) 90000-0000"))}
+    ${field("E-mail", inp("email","email","nome@email.com"))}
+    ${field("Endereço", inp("end","text","Rua, número, bairro, cidade"), "full")}
+    ${field("Contato de emergência", inp("emerg","text","Nome e telefone"))}
+    ${field("Como conheceu a Dalila?", sel("origem",["Indicação","Instagram","Google","Passou na frente","Outro"]))}
+  </div>`) +
+  card("Autorização","", `<div class="chips">
+    <label class="chip"><input type="checkbox" id="lgpd"><span>Autorizo guardar meus dados de saúde para o tratamento (LGPD)</span></label>
+    <label class="chip"><input type="checkbox" id="fotos"><span>Autorizo fotos de antes e depois</span></label></div>`) +
+  actions("Salvar e ir para anamnese"),
+
+anamnese: () => head("Anamnese", "Avaliação de saúde antes do primeiro tratamento. Pode ser revisada a cada retorno.") +
+  card("Queixa principal","o que trouxe o paciente", `<div class="grid">
+    ${field("O que está sentindo?", area("queixa","Ex.: dor na lombar ao acordar, piora quando fica muito tempo sentada"), "full")}
+    ${field("Há quanto tempo?", sel("tempo",["Menos de 1 semana","1 a 4 semanas","1 a 6 meses","Mais de 6 meses"]))}
+    ${field("Objetivo com a massagem", sel("obj",["Aliviar dor","Relaxar / reduzir estresse","Recuperação esportiva","Drenagem / inchaço","Estética","Outro"]))}
+    <div class="full">${scale("dor0","Intensidade da dor hoje",undefined,undefined,6)}</div>
+  </div>`) +
+  card("Onde dói","marque as regiões", chips("regiao", regioes)) +
+  card("Histórico de saúde","itens em laranja pedem atenção ou liberação médica", `
+    ${chips("saude", ["Pressão alta","Diabetes","Problema cardíaco","Varizes","Trombose","Câncer (atual ou passado)","Gestante","Osteoporose","Hérnia de disco","Fibromialgia","Epilepsia","Lesão de pele / ferida","Febre ou infecção","Labirintite"], "alert")}
+    <div class="grid">
+      ${field("Cirurgias (quais e quando)", area("cir","Ex.: cesárea em 2019"))}
+      ${field("Medicamentos em uso", area("med","Ex.: losartana 50mg"))}
+      ${field("Alergias <span class='hint'>(óleos, cremes, aromas)</span>", inp("alerg","text","Ex.: alergia a amêndoas"))}
+      ${field("Acompanhamento médico / fisioterapia", inp("medico","text","Ex.: ortopedista Dr. Silva"))}
+    </div>`) +
+  card("Hábitos e rotina","", `<div class="grid">
+    ${field("Atividade física", sel("ativ",["Não pratica","1 a 2x por semana","3x ou mais por semana"]))}
+    ${field("Qualidade do sono", sel("sono",["Boa","Regular","Ruim"]))}
+    ${field("Água por dia", sel("agua",["Menos de 1 litro","1 a 2 litros","Mais de 2 litros"]))}
+    ${field("Postura no trabalho", sel("post",["Sentado(a) a maior parte","Em pé a maior parte","Alterna","Esforço físico"]))}
+    <div class="full">${scale("estresse","Nível de estresse","Tranquilo","Muito estressado",7)}</div>
+  </div>`) +
+  card("Preferências","", `<div class="grid">
+    <div class="f full">Pressão preferida ${radios("pref",["Leve","Moderada","Forte"])}</div>
+    ${field("Áreas que NÃO quer que sejam tocadas", inp("evitar","text","Ex.: pés, rosto"), "full")}
+  </div>`) +
+  card("Termo de consentimento","", `<div class="grid">
+    <div class="chips full"><label class="chip"><input type="checkbox" id="termo"><span>Declaro que as informações são verdadeiras e autorizo o tratamento</span></label></div>
+    ${field("Data", inp("dtermo","date"))}
+    ${field("Assinatura do paciente <span class='hint'>(nome digitado)</span>", inp("assin","text"))}
+  </div>`) +
+  actions("Salvar anamnese"),
+
+sessao: () => head("Nova sessão", "Registro de cada atendimento. Preenchido no fim de toda sessão.") +
+  card("Dados da sessão","", `<div class="grid">
+    ${field("Data", inp("sdata","date"))}
+    ${field("Horário", inp("shora","time"))}
+    ${field("Nº da sessão", `<input id="snum" type="number" value="7">`)}
+    ${field("Duração", sel("sdur",["30 min","50 min","60 min","90 min"]))}
+  </div>`) +
+  card("Como o paciente chegou","", `<div class="grid">
+    <div class="full">${scale("dorAntes","Dor antes da sessão",undefined,undefined,5)}</div>
+    ${field("Relato do paciente hoje", area("relato","Ex.: melhorou depois da última sessão, mas voltou a doer na quinta"), "full")}
+  </div>`) +
+  card("O que foi feito","", `
+    <div class="f">Técnicas usadas ${chips("tec",["Relaxante","Terapêutica","Drenagem linfática","Desportiva","Liberação miofascial","Pedras quentes","Ventosaterapia","Reflexologia","Shiatsu","Quick massage"])}</div>
+    <div class="f">Regiões trabalhadas ${chips("reg2", regioes)}</div>
+    <div class="grid">
+      <div class="f">Pressão usada ${radios("press",["Leve","Moderada","Forte"])}</div>
+      ${field("Óleos / cremes / aromas", inp("oleo","text","Ex.: óleo de semente de uva + lavanda"))}
+    </div>`) +
+  card("Como o paciente saiu","", `<div class="grid">
+    <div class="full">${scale("dorDepois","Dor depois da sessão",undefined,undefined,2)}</div>
+    ${field("Reação durante a sessão", area("reacao","Ex.: pontos de tensão no trapézio direito, sensibilidade na lombar"))}
+    ${field("Observações da terapeuta", area("obs","Anotações internas"))}
+  </div>`) +
+  card("Orientações e retorno","", `<div class="grid">
+    ${field("Recomendações para casa", area("recom","Ex.: compressa morna, alongamento de 5 min ao acordar, beber água"), "full")}
+    ${field("Próxima sessão", inp("prox","date"))}
+    ${field("Frequência sugerida", sel("freq",["Semanal","Quinzenal","Mensal","Quando precisar"]))}
+  </div>`) +
+  actions("Salvar sessão"),
+
+historico: () => head("Histórico do paciente", "Todas as sessões em ordem, com a dor antes e depois para acompanhar a evolução.") +
+  card("Resumo","", `<div class="grid">
+    ${field("Queixa principal", `<input id="h1" value="Dor lombar há 6 meses" readonly>`)}
+    ${field("Atenção", `<input id="h2" value="Pressão alta (usa losartana)" readonly>`)}
+    ${field("Pressão preferida", `<input id="h3" value="Moderada" readonly>`)}
+    ${field("Sessões realizadas", `<input id="h4" value="6" readonly>`)}
+  </div>`) +
+  card("Sessões","dor antes → depois (0 a 10)", `<div class="timeline">${[
+    ["12/11/2026","Sessão 6 · Terapêutica + ventosaterapia · 60 min",4,1,"Lombar bem melhor. Orientada a manter alongamento."],
+    ["29/10/2026","Sessão 5 · Liberação miofascial · 60 min",5,2,"Tensão no glúteo direito. Usou óleo de semente de uva."],
+    ["15/10/2026","Sessão 4 · Terapêutica · 50 min",6,3,"Relatou piora após viagem de carro."],
+    ["01/10/2026","Sessão 1 · Avaliação + relaxante · 60 min",8,5,"Primeiro atendimento. Anamnese preenchida."],
+  ].map(([d,t,a,b,o])=>`<div class="sess"><div><h3>${d}</h3><div class="meta">${t}</div></div><div class="pain"><div>${a}<small>antes</small></div><span class="arrow">→</span><div class="down">${b}<small>depois</small></div></div><p>${o}</p></div>`).join("")}</div>`) +
+  `<div class="actions"><button class="btn-ghost" type="button" onclick="location.hash='anamnese'">Ver anamnese</button><button class="btn-primary" type="button" onclick="location.hash='sessao'">+ Registrar nova sessão</button></div>`,
+};
+
+function render(){
+  const k = (location.hash||"#pacientes").slice(1);
+  const key = telas[k] ? k : "pacientes";
+  document.getElementById("view").innerHTML = telas[key]();
+  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on", a.getAttribute("href")==="#"+key));
+  window.scrollTo(0,0);
+}
+let tt;
+function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,2200); }
+window.addEventListener("hashchange", render);
+render();
+</script>
